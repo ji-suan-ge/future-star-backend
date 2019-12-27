@@ -1,0 +1,9 @@
+stages:
+    - test
+
+test_job:
+    stage: test
+    script:
+        - echo '------Test job start------'
+    tags:
+        - future-1
