@@ -32,6 +32,11 @@ class Student(models.Model):
         (0, '男'),
         (1, '女'),
     )
+    STATE_CHOICE = (
+        (0, '不再是校友'),
+        (1, '还未毕业的校友'),
+        (2, '校友')
+    )
     name = models.CharField(max_length=30, blank=False)
     gender = models.IntegerField(default=0, choices=GENDER_CHOICES)
     birthday = models.DateField()
@@ -41,10 +46,10 @@ class Student(models.Model):
     city = models.CharField(max_length=30)  # 城市
     education = models.CharField(max_length=30, choices=EDUCATION_LIST)  # 最高学历
     school = models.CharField(max_length=30)  # 毕业院校 包括时间
-    previous_school = models.CharField(max_length=30)  # 创业前所在公司名称
+    previous_company = models.CharField(max_length=30)  # 创业前所在公司名称
     previous_position = models.CharField(max_length=30)  # 创业前职位
     company_id = models.IntegerField(blank=False)  # 公司Id
-    state = models.IntegerField(default=1)  # 0 -不再是校友 ｜ 1 -还未毕业的校友 ｜2 -校友
+    state = models.IntegerField(choices=STATE_CHOICE)  # 0 -不再是校友 ｜ 1 -还未毕业的校友 ｜2 -校友
     # student_introduction = models.CharField(max_length=1000)  # 学员介绍
     # # user_referee1_message = models.TextField(blank=False)  # 推荐人信息
     # # user_referee2_message = models.TextField()
@@ -70,8 +75,8 @@ class Company(models.Model):
     )
     name = models.CharField(max_length=30, blank=False)  # 公司名字
     website = models.CharField(max_length=30)  # 公司网址
-    the_wx_public = models.CharField(max_length=30)  # 微信公众号
-    company_create_time = models.DateField()  # 公司创建时间
+    wx_public = models.CharField(max_length=30)  # 微信公众号
+    create_time = models.DateField()  # 公司创建时间
     city = models.CharField(max_length=30)  # 公司所在城市
     number_employee = models.IntegerField()  # 公司人数
     position = models.CharField(max_length=30)  # 职位
