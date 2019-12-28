@@ -30,8 +30,10 @@ class Activity(models.Model):
     arrangement = models.TextField(max_length=1000, blank=False)
     # 报名费
     price = models.FloatField(blank=False)
+    # 当前人数
+    current_people_number = models.IntegerField(blank=False, default=0)
     # 人数限制
-    people_number_limit = models.IntegerField(blank=False)
+    people_number_limit = models.IntegerField(blank=False, default=0)
 
 
 class ActivityStudent(models.Model):
