@@ -1,9 +1,19 @@
-from django.db import models
+"""
+student module models
 
-# Create your models here.
+:author: lishanZheng
+:date: 2019/12/28
+"""
+from django.db import models
 
 
 class Student(models.Model):
+    """
+    student model
+
+    :author: lishanZheng
+    :date: 2019/12/28
+    """
     POSITION_LIST = (
         ('F', '创始人'),
         ('CF', '联合创始人'),
@@ -44,6 +54,12 @@ class Student(models.Model):
 
 
 class Company(models.Model):
+    """
+    company model
+
+    :author: lishanZheng
+    :date: 2019/12/28
+    """
     FINANCING_SITUATION = (
         ('N', '尚未获得融资'),
         ('seed/angel', '已完成种子/天使融资'),
@@ -61,12 +77,18 @@ class Company(models.Model):
     position = models.CharField(max_length=30)  # 职位
     introduction = models.TextField()  # 公司介绍
     company_data = models.TextField()   # 公司运营数据
-    income_scale = models.CharField()  # 公司收入规模
-    financing_situation = models.CharField(choices=FINANCING_SITUATION)  # 融资情况
+    income_scale = models.CharField(max_length=30)  # 公司收入规模
+    financing_situation = models.CharField(max_length=30, choices=FINANCING_SITUATION)  # 融资情况
     value_of_assessment = models.CharField(max_length=20, default='')  # 公司估值
 
 
 class ApplicationInformation(models.Model):
+    """
+    application information model
+
+    :author: lishanZheng
+    :date: 2019/12/28
+    """
     WAY_TO_CAMP = (
         ('wx', '微信朋友圈'),
         ('friend', '朋友推荐'),
@@ -82,10 +104,16 @@ class ApplicationInformation(models.Model):
     accept_absence = models.IntegerField(choices=ACCEPT_CHOICE)  # 是否接受缺勤制度
     reason_application = models.TextField(blank=False)  # 申请理由
     contribution_for_us = models.TextField()  # 可以带来的贡献
-    way = models.CharField(choices=WAY_TO_CAMP)  # 获取报名的渠道
+    way = models.CharField(max_length=30, choices=WAY_TO_CAMP)  # 获取报名的渠道
 
 
 class RecommendationPeople(models.Model):
+    """
+    recommendation people model
+
+    :author: lishanZheng
+    :date: 2019/12/28
+    """
     information_id = models.IntegerField()  # 申请资料Id
     name = models.CharField(max_length=30, blank=False)  # 推荐人姓名
     company = models.CharField(max_length=30, blank=False)  # 推荐人的公司名字
@@ -93,7 +121,11 @@ class RecommendationPeople(models.Model):
 
 
 class Evaluation(models.Model):
+    """
+    evaluation model
+
+    :author: lishanZheng
+    :date: 2019/12/28
+    """
     fraction = models.IntegerField(blank=False)  # 评价分数
     description = models.TextField(blank=False)  # 评价内容
-
-
