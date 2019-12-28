@@ -7,11 +7,11 @@ apps
 from django.apps import AppConfig
 
 
-class AdminConfig(AppConfig):
+class AdministratorConfig(AppConfig):
     """
-    admin config
+    administrator config
 
     :author: gexuewen
     :date: 2019/12/28
     """
-    name = 'admin'
+    name = 'administrator'
