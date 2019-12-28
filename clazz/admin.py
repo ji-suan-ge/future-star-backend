@@ -1,3 +1,7 @@
-from django.contrib import admin
+"""
+admin
 
-# Register your models here.
+:author: gexuewen
+:date: 2019/12/28
+"""
+# from django.contrib import admin
