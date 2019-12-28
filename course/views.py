@@ -1,3 +1,9 @@
-from django.shortcuts import render
+"""
+views
+
+:author: lishanZheng
+:date: 2019/12/28
+"""
+# from django.shortcuts import render
 
 # Create your views here.
