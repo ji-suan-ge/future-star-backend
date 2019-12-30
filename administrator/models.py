@@ -43,3 +43,5 @@ class Privilege(models.Model):
     activity = models.IntegerField(choices=PRIVILEGE_CHOICE)
     # 学生管理
     student = models.IntegerField(choices=PRIVILEGE_CHOICE)
+    # 超级管理员权限标示
+    super = models.IntegerField(choices=PRIVILEGE_CHOICE, default=2)
