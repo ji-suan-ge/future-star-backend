@@ -1,9 +1,16 @@
-stages:
-    - test
+image: python:3.7.6-stretch
 
-test_job:
-    stage: test
+before_script:
+    - apt-get install default-libmysqlclient-dev
+    - pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
+    - pip install -r requirements.txt
+
+stages:
+    - lint
+
+lint-job:
+    stage: lint
     script:
-        - echo '------Test job start------'
+        - pylint activity administrator clazz course semester student
     tags:
         - future-1
