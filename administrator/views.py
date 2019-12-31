@@ -39,3 +39,18 @@ def login(request):
             return result_uitl.error(error_code=code.IS_LOGIN, message='已登陆')
         return result_uitl.error(error_code=code.INCORRECT_PASSWORD, message='密码错误')
     return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+
+
+@csrf_exempt
+def logout(request):
+    """
+    logout
+
+    :author: lishanZheng
+    :date: 2019/12/31
+    """
+    if request.session.get('is_login'):
+        request.session['is_login'] = None
+        request.session['admin'] = None
+        return result_uitl.success_empty()
+    return result_uitl.error(error_code=code.IS_LOGIN, message='未登陆')
