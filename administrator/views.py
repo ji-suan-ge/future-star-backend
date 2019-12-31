@@ -7,6 +7,7 @@ views
 from django.views.decorators.csrf import csrf_exempt
 from administrator import code
 from util import result_uitl
+from util.encrypt import compare
 from .serializers import AdministratorSerializer, PrivilegeSerializer
 from .models import Administrator, Privilege
 
@@ -29,7 +30,7 @@ def login(request):
             correct_password = admin.password
         except Administrator.DoesNotExist:
             return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
-        if correct_password == password:
+        if compare(password, correct_password):
             if request.session.get('is_login') is None:
                 admin.password = ''
                 request.session['is_login'] = True

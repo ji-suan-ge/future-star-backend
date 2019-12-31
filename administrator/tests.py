@@ -7,6 +7,7 @@ tests
 from django.test import TestCase
 from administrator import code
 from administrator.models import Administrator
+from util.encrypt import encrypt
 from util.result_uitl import SUCCESS
 
 
@@ -18,7 +19,9 @@ class AdministratorTest(TestCase):
     :date: 2019/12/29
     """
     def setUp(self):
-        Administrator.objects.create(account='test', password='test123', privilege_id=0)
+        password = 'test123'
+        password = encrypt(password)
+        Administrator.objects.create(account='test', password=password, privilege_id=0)
 
     def test_login(self):
         """
