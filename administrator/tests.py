@@ -20,7 +20,7 @@ class AdministratorTest(TestCase):
     def setUp(self):
         Administrator.objects.create(account='test', password='test123', privilege_id=0)
 
-    def test_login_success(self):
+    def test_login(self):
         """
         登陆成功
 
@@ -79,3 +79,27 @@ class AdministratorTest(TestCase):
         res = self.client.post('/administrator/login',
                                data={})
         self.assertEqual(res.json()['code'], code.EMPTY_REQUEST)
+
+    def test_logout(self):
+        """
+        成功登出
+
+        :author: lishanZheng
+        :date: 2019/12/30
+        """
+        res = self.client.post('/administrator/login',
+                               data={'account': 'test', 'password': 'test123'})
+        res = self.client.post('/administrator/logout',
+                               data={})
+        self.assertEqual(res.json()['code'], SUCCESS)
+
+    def test_not_login(self):
+        """
+        未登陆就登出
+
+        :author: lishanZheng
+        :date: 2019/12/30
+        """
+        res = self.client.post('/administrator/logout',
+                               data={})
+        self.assertEqual(res.json()['code'], code.NOT_LOGIN)
