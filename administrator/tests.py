@@ -5,9 +5,9 @@ tests
 :date: 2019/12/28
 """
 from django.test import TestCase
+from administrator import code
 from administrator.models import Administrator
 from util.result_uitl import SUCCESS
-from administrator import code
 
 
 class AdministratorTest(TestCase):
