@@ -7,10 +7,28 @@ before_script:
 
 stages:
     - lint
+    - test
 
 lint-job:
     stage: lint
     script:
         - pylint activity administrator clazz course semester student util
+    tags:
+        - future-1
+
+test-job:
+    stage: test
+    services:
+        - mysql:5.7
+    variables:
+          MYSQL_DATABASE: "future_star_test"
+          MYSQL_ROOT_PASSWORD: "future_star_test-666"
+    script:
+        - python manage.py test activity.tests --settings=backend.settings_test --keepdb
+        - python manage.py test administrator.tests --settings=backend.settings_test --keepdb
+        - python manage.py test clazz.tests --settings=backend.settings_test --keepdb
+        - python manage.py test course.tests --settings=backend.settings_test --keepdb
+        - python manage.py test semester.tests --settings=backend.settings_test --keepdb
+        - python manage.py test student.tests --settings=backend.settings_test --keepdb
     tags:
         - future-1
