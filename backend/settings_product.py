@@ -83,7 +83,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'future_star',
-        'USER': 'future_star',
+        'USER': '******',
         'PASSWORD': '******',
         'HOST': '***.***.***.***',
         'PORT': 3306
