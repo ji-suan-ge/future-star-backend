@@ -7,6 +7,7 @@ tests
 from django.test import TestCase
 from administrator import code
 from administrator.models import Administrator
+from util.encrypt import encrypt
 from util.result_uitl import SUCCESS
 
 
@@ -18,7 +19,9 @@ class AdministratorTest(TestCase):
     :date: 2019/12/29
     """
     def setUp(self):
-        Administrator.objects.create(account='test', password='test123', privilege_id=0)
+        password = 'test123'
+        password = encrypt(password)
+        Administrator.objects.create(account='test', password=password, privilege_id=0)
 
     def test_login(self):
         """
@@ -103,3 +106,27 @@ class AdministratorTest(TestCase):
         res = self.client.post('/administrator/logout',
                                data={})
         self.assertEqual(res.json()['code'], code.NOT_LOGIN)
+
+    def test_add_admin(self):
+        """
+        添加一个管理员
+
+        :author: lishanZheng
+        :date: 2019/12/30
+        """
+        res = self.client.post('/administrator/add', data={
+            'account': 'test1', 'password': 'test123', 'name': 'test',
+            'semester': 2, 'activity': 2, 'enrollment': 2, 'student': 2})
+        self.assertEqual(res.json()['code'], SUCCESS)
+
+    def test_admin_exist(self):
+        """
+        管理员账户已经存在
+
+        :author: lishanZheng
+        :date: 2019/12/30
+        """
+        res = self.client.post('/administrator/add', data={
+            'account': 'test', 'password': 'test123', 'name': 'test',
+            'semester': 2, 'activity': 2, 'enrollment': 2, 'student': 2})
+        self.assertEqual(res.json()['code'], code.ADMIN_EXIST)
