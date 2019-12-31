@@ -53,4 +53,4 @@ def logout(request):
         request.session['is_login'] = None
         request.session['admin'] = None
         return result_uitl.success_empty()
-    return result_uitl.error(error_code=code.IS_LOGIN, message='未登陆')
+    return result_uitl.error(error_code=code.NOT_LOGIN, message='未登陆')
