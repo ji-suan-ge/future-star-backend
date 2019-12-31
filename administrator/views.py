@@ -7,7 +7,7 @@ views
 from django.views.decorators.csrf import csrf_exempt
 from administrator import code
 from util import result_uitl
-from util.encrypt import compare
+from util.encrypt import compare, encrypt
 from .serializers import AdministratorSerializer, PrivilegeSerializer
 from .models import Administrator, Privilege
 
@@ -68,6 +68,7 @@ def add(request):
     if request.method == 'POST' and request.POST:
         account = request.POST.get('account')
         password = request.POST.get('password')
+        password = encrypt(password)
         name = request.POST.get('name')
         enrollment = request.POST.get('enrollment')
         semester = request.POST.get('semester')
@@ -82,6 +83,7 @@ def add(request):
                                              name=name, privilege_id=privilege.id)
         privilege = PrivilegeSerializer(privilege).data
         admin = AdministratorSerializer(admin).data
+        admin.password = ''
         # 合并管理员与权限
         admin = admin.copy()
         admin.update(privilege)
