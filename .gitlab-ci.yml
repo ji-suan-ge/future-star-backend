@@ -18,11 +18,6 @@ lint-job:
 
 test-job:
     stage: test
-    services:
-        - mysql:5.7
-    variables:
-          MYSQL_DATABASE: "future_star_test"
-          MYSQL_ROOT_PASSWORD: "future_star_test-666"
     script:
         - python manage.py test activity.tests --settings=backend.settings_test --keepdb
         - python manage.py test administrator.tests --settings=backend.settings_test --keepdb

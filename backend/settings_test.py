@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'future_star_test',
         'USER': 'root',
         'PASSWORD': 'future_star_test-666',
-        'HOST': 'mysql',
+        'HOST': 'future_star_test_mysql',
         'PORT': 3306,
         'TEST': {
             'NAME': 'future_star_test'
