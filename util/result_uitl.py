@@ -23,6 +23,19 @@ def success(data):
     })
 
 
+def success_empty():
+    """
+    success
+
+    :author: lishanZheng
+    :date: 2019/12/30
+    """
+    return JsonResponse({
+        'code': SUCCESS,
+        'msg': '请求成功',
+    })
+
+
 def error(error_code, message):
     """
     error
