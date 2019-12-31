@@ -6,6 +6,8 @@ result util
 """
 from django.http import JsonResponse
 
+SUCCESS = '2000'
+
 
 def success(data):
     """
@@ -15,7 +17,7 @@ def success(data):
     :date: 2019/12/30
     """
     return JsonResponse({
-        'code': "2000",
+        'code': SUCCESS,
         'msg': '请求成功',
         'data': data
     })
