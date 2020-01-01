@@ -5,9 +5,13 @@ views
 :date: 2019/12/28
 """
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin
+
 from administrator import code
 from util import result_util
 from util.encrypt import compare, encrypt
+from util.pagination import CustomPageNumberPagination
 from .serializers import AdministratorSerializer, PrivilegeSerializer
 from .models import Administrator, Privilege
 
@@ -140,3 +144,25 @@ def delete(request):
         admin.save()
         return result_util.success_empty()
     return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+
+
+class AdministratorList(GenericAPIView, ListModelMixin):
+    """
+    activity list view
+
+    :author: lishanZheng
+    :date: 2020/01/01
+    """
+    queryset = Administrator.objects.filter(state=1)
+    serializer_class = AdministratorSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get(self, request):
+        """
+        get activity list
+
+        :author: lishanZheng
+        :date: 2020/01/01
+        """
+        page = self.list(request).data
+        return result_util.success(page)

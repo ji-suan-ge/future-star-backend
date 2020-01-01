@@ -16,4 +16,5 @@ urlpatterns = [
     path('add', views.add),
     path('modify_pri', views.modify_privilege),
     path('delete', views.delete),
+    path(LIST_ADMINISTRATOR, views.AdministratorList.as_view()),
 ]
