@@ -30,6 +30,8 @@ def login(request):
             correct_password = admin.password
         except Administrator.DoesNotExist:
             return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
+        if admin.state == 0:
+            return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
         if compare(password, correct_password):
             if request.session.get('is_login') is None:
                 admin.password = ''
