@@ -6,6 +6,9 @@ models
 """
 from django.db import models
 
+from semester.models import Semester
+from student.models import Student, ApplicationInformation, Evaluation
+
 
 class Clazz(models.Model):
     """
@@ -19,8 +22,8 @@ class Clazz(models.Model):
         (1, '进行中'),
         (2, '已结束')
     )
-    # 学期 ID
-    semester_id = models.IntegerField(blank=False)
+    # 学期
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='clazzs')
     # 班级名称
     name = models.CharField(max_length=30, blank=False)
     # 班级介绍
@@ -51,13 +54,13 @@ class ClazzStudent(models.Model):
         (3, '已毕业'),
         (4, '未能完成')
     )
-    # 班级 ID
-    clazz_id = models.IntegerField(blank=False)
-    # 校友 ID
-    student_id = models.IntegerField(blank=False)
-    # 申请材料 ID
-    apply_id = models.IntegerField(blank=False)
-    # 评价 ID
-    evaluation_id = models.IntegerField(blank=False)
+    # 班级
+    clazz = models.ForeignKey(Clazz, on_delete=models.CASCADE)
+    # 校友
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    # 申请材料
+    apply = models.ForeignKey(ApplicationInformation, on_delete=models.CASCADE)
+    # 评价
+    evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE)
     # 校友状态
     state = models.IntegerField(choices=CLAZZ_STUDENT_STATE_CHOICE)

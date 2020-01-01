@@ -148,7 +148,7 @@ def delete(request):
 
 class AdministratorList(GenericAPIView, ListModelMixin):
     """
-    activity list view
+    administrator list view
 
     :author: lishanZheng
     :date: 2020/01/01
@@ -159,7 +159,7 @@ class AdministratorList(GenericAPIView, ListModelMixin):
 
     def get(self, request):
         """
-        get activity list
+        get administrator list
 
         :author: lishanZheng
         :date: 2020/01/01
