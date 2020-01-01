@@ -22,8 +22,9 @@ class AdministratorTest(TestCase):
     def setUp(self):
         password = 'test123'
         password = encrypt(password)
-        Administrator.objects.create(account='test', password=password,
-                                     name='admin_test', privilege_id=1)
+        admin = Administrator.objects.create(account='test', password=password,
+                                             name='admin_test', privilege_id=1)
+        admin.save()
 
     def test_login(self):
         """
@@ -144,3 +145,21 @@ class AdministratorTest(TestCase):
         admin.save()
         res = self.client.post('/administrator/delete', data={'id': admin.id})
         self.assertEqual(res.json()['code'], SUCCESS)
+
+    def test_administrator_list(self):
+        """
+        分页获取管理员
+
+        :author: lishanZheng
+        :date: 2020/01/01
+        """
+        admin = Administrator.objects.create(account='test_delete', password='123',
+                                             name='admin_test', privilege_id=1)
+        admin.save()
+        res = self.client.get('/administrator/list_administrator',
+                              data={
+                                  'page': 1,
+                                  'page_size': 1
+                              })
+        result = res.json()
+        self.assertEqual(result['code'], SUCCESS)
