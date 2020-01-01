@@ -19,11 +19,11 @@ lint-job:
 test-job:
     stage: test
     script:
-        - python manage.py test activity.tests --settings=backend.settings_test --keepdb
-        - python manage.py test administrator.tests --settings=backend.settings_test --keepdb
-        - python manage.py test clazz.tests --settings=backend.settings_test --keepdb
-        - python manage.py test course.tests --settings=backend.settings_test --keepdb
-        - python manage.py test semester.tests --settings=backend.settings_test --keepdb
-        - python manage.py test student.tests --settings=backend.settings_test --keepdb
+        - python manage.py test activity.test --settings=config.settings_test --keepdb
+        - python manage.py test administrator.tests --settings=config.settings_test --keepdb
+        - python manage.py test clazz.tests --settings=config.settings_test --keepdb
+        - python manage.py test course.tests --settings=config.settings_test --keepdb
+        - python manage.py test semester.tests --settings=config.settings_test --keepdb
+        - python manage.py test student.tests --settings=config.settings_test --keepdb
     tags:
         - future-1

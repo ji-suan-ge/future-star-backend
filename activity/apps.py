@@ -1,5 +1,5 @@
 """
-apps
+activity apps
 
 :author: gexuewen
 :date: 2019/12/28

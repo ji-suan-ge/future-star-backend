@@ -1,4 +1,4 @@
-"""backend URL Configuration
+"""config URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+ACTIVITY = 'activity/'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(ACTIVITY, include('activity.urls')),
     path('administrator/', include('administrator.urls'))
 ]
