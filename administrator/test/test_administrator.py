@@ -6,7 +6,7 @@ test administrator
 """
 from django.test import TestCase
 from administrator import code
-from administrator.models import Administrator
+from administrator.models import Administrator, Privilege
 from util.encrypt import encrypt
 from util.result_util import SUCCESS
 
@@ -20,10 +20,13 @@ class AdministratorTest(TestCase):
     """
 
     def setUp(self):
+        privilege = Privilege.objects.create(enrollment=2, semester=2,
+                                             activity=2, student=2, super=2)
+        privilege.save()
         password = 'test123'
         password = encrypt(password)
         admin = Administrator.objects.create(account='test', password=password,
-                                             name='admin_test', privilege_id=1)
+                                             privilege_id=privilege.id, name='admin_test')
         admin.save()
 
     def test_login(self):
@@ -74,17 +77,6 @@ class AdministratorTest(TestCase):
                                data={'account': 'test', 'password': 'test123'})
         self.assertEqual(res.json()['code'], code.IS_LOGIN)
 
-    def test_empty_request(self):
-        """
-        空请求体
-
-        :author: lishanZheng
-        :date: 2019/12/30
-        """
-        res = self.client.post('/administrator/login',
-                               data={})
-        self.assertEqual(res.json()['code'], code.EMPTY_REQUEST)
-
     def test_logout(self):
         """
         成功登出
@@ -116,7 +108,7 @@ class AdministratorTest(TestCase):
         :author: lishanZheng
         :date: 2019/12/30
         """
-        res = self.client.post('/administrator/add', data={
+        res = self.client.post('/administrator/administrator', data={
             'account': 'test1', 'password': 'test123', 'name': 'test',
             'semester': 2, 'activity': 2, 'enrollment': 2, 'student': 2})
         self.assertEqual(res.json()['code'], SUCCESS)
@@ -128,7 +120,7 @@ class AdministratorTest(TestCase):
         :author: lishanZheng
         :date: 2019/12/30
         """
-        res = self.client.post('/administrator/add', data={
+        res = self.client.post('/administrator/administrator', data={
             'account': 'test', 'password': 'test123', 'name': 'test',
             'semester': 2, 'activity': 2, 'enrollment': 2, 'student': 2})
         self.assertEqual(res.json()['code'], code.ADMIN_EXIST)
@@ -140,8 +132,12 @@ class AdministratorTest(TestCase):
         :author: lishanZheng
         :date: 2019/12/30
         """
-        admin = Administrator.objects.create(account='test_delete', password='123',
-                                             name='admin_test', privilege_id=1)
+        privilege = Privilege.objects.create(enrollment=2, semester=2,
+                                             activity=2, student=2, super=2)
+        privilege.save()
+        password = encrypt('test')
+        admin = Administrator.objects.create(account='test', password=password,
+                                             privilege_id=privilege.id, name='admin_test')
         admin.save()
         res = self.client.post('/administrator/delete', data={'id': admin.id})
         self.assertEqual(res.json()['code'], SUCCESS)
@@ -153,10 +149,7 @@ class AdministratorTest(TestCase):
         :author: lishanZheng
         :date: 2020/01/01
         """
-        admin = Administrator.objects.create(account='test_delete', password='123',
-                                             name='admin_test', privilege_id=1)
-        admin.save()
-        res = self.client.get('/administrator/list_administrator',
+        res = self.client.get('/administrator/administrator',
                               data={
                                   'page': 1,
                                   'page_size': 1
