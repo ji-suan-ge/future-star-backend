@@ -34,6 +34,7 @@ class Activity(models.Model):
     current_people_number = models.IntegerField(blank=False, default=0)
     # 人数限制
     people_number_limit = models.IntegerField(blank=False, default=0)
+    # state = models.IntegerField(default=0)
 
 
 class ActivityStudent(models.Model):
