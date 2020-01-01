@@ -18,7 +18,10 @@ class Semester(models.Model):
         (0, '正在进行'),
         (1, '已结束')
     )
-    period_semester = models.IntegerField()  # 期数
-    subject = models.TextField()  # 主题
-    introduction = models.TextField()  # 介绍
+    # 期数
+    period_semester = models.IntegerField()
+    # 主题
+    subject = models.TextField()
+    # 介绍
+    introduction = models.TextField()
     state = models.IntegerField(choices=STATE, default=0)

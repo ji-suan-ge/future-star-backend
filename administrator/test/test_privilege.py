@@ -19,10 +19,13 @@ class PrivilegeTest(TestCase):
     """
 
     def setUp(self):
-        password = 'test12'
-        password = encrypt(password)
-        Administrator.objects.create(account='test2', password=password,
-                                     name='admin_test', privilege_id=1)
+        privilege = Privilege.objects.create(enrollment=2, semester=1,
+                                             activity=2, student=2, super=2)
+        privilege.save()
+        password = encrypt('test123')
+        admin = Administrator.objects.create(account='test', password=password,
+                                             privilege_id=privilege.id, name='admin_test')
+        admin.save()
 
     def test_modify_pri(self):
         """
@@ -34,7 +37,7 @@ class PrivilegeTest(TestCase):
         privilege = Privilege.objects.create(enrollment=2, semester=2,
                                              activity=2, student=2, super=2)
         privilege.save()
-        res = self.client.post('/administrator/modify_pri', data={
+        res = self.client.post('/administrator/modify', data={
             'privilege_id': privilege.id, 'semester': 1, 'activity': 1,
             'enrollment': 1, 'student': 1})
         self.assertEqual(res.json()['code'], SUCCESS)

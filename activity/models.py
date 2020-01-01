@@ -6,6 +6,9 @@ activity models
 """
 from django.db import models
 
+from clazz.models import Clazz
+from student.models import Student
+
 
 class Activity(models.Model):
     """
@@ -34,7 +37,8 @@ class Activity(models.Model):
     current_people_number = models.IntegerField(blank=False, default=0)
     # 人数限制
     people_number_limit = models.IntegerField(blank=False, default=0)
-    # state = models.IntegerField(default=0)
+    # 活动状态
+    state = models.IntegerField(default=0)
 
 
 class ActivityStudent(models.Model):
@@ -48,10 +52,10 @@ class ActivityStudent(models.Model):
         (0, 'WAIT_FOR_PAY'),
         (1, 'PAID')
     )
-    # 活动 ID
-    activity_id = models.IntegerField(blank=False)
-    # 校友 ID
-    student_id = models.IntegerField(blank=False)
+    # 活动
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    # 校友
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     # 活动状态
     state = models.IntegerField(choices=STATE_CHOICE)
 
@@ -63,7 +67,7 @@ class ActivityClazz(models.Model):
     :author: gexuewen
     :date: 2019/12/28
     """
-    # 活动 ID
-    activity_id = models.IntegerField(blank=False)
-    # 班级 ID
-    clazz_id = models.IntegerField(blank=False)
+    # 活动
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    # 班级
+    clazz = models.ForeignKey(Clazz, on_delete=models.CASCADE)

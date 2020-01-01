@@ -8,13 +8,10 @@ from django.urls import path
 
 from administrator import views
 
-LIST_ADMINISTRATOR = 'list_administrator'
-
 urlpatterns = [
     path('login', views.login),
     path('logout', views.logout),
-    path('add', views.add),
-    path('modify_pri', views.modify_privilege),
+    path('administrator', views.AdministratorList.as_view()),
     path('delete', views.delete),
-    path(LIST_ADMINISTRATOR, views.AdministratorList.as_view()),
+    path('modify', views.modify)
 ]
