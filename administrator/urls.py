@@ -12,4 +12,5 @@ urlpatterns = [
     url('logout', views.logout, name='logout'),
     url('add', views.add, name='add'),
     url('modify_pri', views.modify_privilege, name='modify_privilege'),
+    url('delete', views.delete, name='delete'),
 ]

@@ -114,3 +114,23 @@ def modify_privilege(request):
         privilege = PrivilegeSerializer(privilege).data
         return result_uitl.success(privilege)
     return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+
+
+@csrf_exempt
+def delete(request):
+    """
+    delete admin
+
+    :author: lishanZheng
+    :date: 2020/01/01
+    """
+    if request.method == 'POST' and request.POST:
+        admin_id = request.POST.get('id')
+        try:
+            admin = Administrator.objects.get(id=admin_id)
+        except Administrator.DoesNotExist:
+            return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='该管理员不存在')
+        admin.state = 0
+        admin.save()
+        return result_uitl.success_empty()
+    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
