@@ -85,7 +85,32 @@ def add(request):
         privilege = PrivilegeSerializer(privilege).data
         admin = AdministratorSerializer(admin).data
         # 合并管理员与权限
-        admin = admin.copy()
-        admin.update(privilege)
-        return result_uitl.success(data=admin)
+        privilege = privilege.copy()
+        privilege.update(admin)
+        return result_uitl.success(data=privilege)
+    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+
+
+@csrf_exempt
+def modify_privilege(request):
+    """
+    modify admin privilege
+
+    :author: lishanZheng
+    :date: 2020/01/01
+    """
+    if request.method == 'POST' and request.POST:
+        privilege_id = request.POST.get('privilege_id')
+        enrollment = request.POST.get('enrollment')
+        semester = request.POST.get('semester')
+        activity = request.POST.get('activity')
+        student = request.POST.get('student')
+        privilege = Privilege.objects.get(id=privilege_id)
+        privilege.enrollment = enrollment
+        privilege.semester = semester
+        privilege.activity = activity
+        privilege.student = student
+        privilege.save()
+        privilege = PrivilegeSerializer(privilege).data
+        return result_uitl.success(privilege)
     return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')

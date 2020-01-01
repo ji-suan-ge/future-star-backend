@@ -8,7 +8,8 @@ from django.conf.urls import url
 from administrator import views
 
 urlpatterns = [
-    url(r'login', views.login, name='login'),
-    url(r'logout', views.logout, name='logout'),
-    url(r'add', views.add, name='add'),
+    url('login', views.login, name='login'),
+    url('logout', views.logout, name='logout'),
+    url('add', views.add, name='add'),
+    url('modify_pri', views.modify_privilege, name='modify_privilege'),
 ]
