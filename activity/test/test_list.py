@@ -8,7 +8,7 @@ from django.test import TestCase
 
 from activity.models import Activity
 import activity.urls as activity_urls
-import util.result_uitl as result_util
+import util.result_util as result_util
 from config import urls
 from util.url import get_url
 

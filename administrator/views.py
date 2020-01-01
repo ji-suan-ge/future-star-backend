@@ -6,7 +6,7 @@ views
 """
 from django.views.decorators.csrf import csrf_exempt
 from administrator import code
-from util import result_uitl
+from util import result_util
 from util.encrypt import compare, encrypt
 from .serializers import AdministratorSerializer, PrivilegeSerializer
 from .models import Administrator, Privilege
@@ -29,19 +29,19 @@ def login(request):
             admin = Administrator.objects.get(account=account)
             correct_password = admin.password
         except Administrator.DoesNotExist:
-            return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
+            return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
         if admin.state == 0:
-            return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
+            return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
         if compare(password, correct_password):
             if request.session.get('is_login') is None:
                 admin.password = ''
                 request.session['is_login'] = True
                 admin = AdministratorSerializer(admin).data
                 request.session['admin'] = admin
-                return result_uitl.success(admin)
-            return result_uitl.error(error_code=code.IS_LOGIN, message='已登录')
-        return result_uitl.error(error_code=code.INCORRECT_PASSWORD, message='密码错误')
-    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+                return result_util.success(admin)
+            return result_util.error(error_code=code.IS_LOGIN, message='已登录')
+        return result_util.error(error_code=code.INCORRECT_PASSWORD, message='密码错误')
+    return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
 
 
 @csrf_exempt
@@ -55,8 +55,8 @@ def logout(request):
     if request.session.get('is_login'):
         request.session['is_login'] = None
         request.session['admin'] = None
-        return result_uitl.success_empty()
-    return result_uitl.error(error_code=code.NOT_LOGIN, message='未登录')
+        return result_util.success_empty()
+    return result_util.error(error_code=code.NOT_LOGIN, message='未登录')
 
 
 @csrf_exempt
@@ -82,7 +82,7 @@ def add(request):
             if admin_old.state == 0:
                 admin_old.delete()
             else:
-                return result_uitl.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
+                return result_util.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
         privilege = Privilege.objects.create(enrollment=enrollment, semester=semester,
                                              activity=activity, student=student, super=2)
         admin = Administrator.objects.create(account=account, password=password,
@@ -93,8 +93,8 @@ def add(request):
         # 合并管理员与权限
         privilege = privilege.copy()
         privilege.update(admin)
-        return result_uitl.success(data=privilege)
-    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+        return result_util.success(data=privilege)
+    return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
 
 
 @csrf_exempt
@@ -118,8 +118,8 @@ def modify_privilege(request):
         privilege.student = student
         privilege.save()
         privilege = PrivilegeSerializer(privilege).data
-        return result_uitl.success(privilege)
-    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+        return result_util.success(privilege)
+    return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
 
 
 @csrf_exempt
@@ -135,8 +135,8 @@ def delete(request):
         try:
             admin = Administrator.objects.get(id=admin_id)
         except Administrator.DoesNotExist:
-            return result_uitl.error(error_code=code.ADMIN_NOT_EXIST, message='该管理员不存在')
+            return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='该管理员不存在')
         admin.state = 0
         admin.save()
-        return result_uitl.success_empty()
-    return result_uitl.error(error_code=code.EMPTY_REQUEST, message='请求体空')
+        return result_util.success_empty()
+    return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
