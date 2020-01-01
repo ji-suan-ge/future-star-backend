@@ -1,5 +1,5 @@
 """
-admin
+activity admin
 
 :author: gexuewen
 :date: 2019/12/28
