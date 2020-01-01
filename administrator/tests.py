@@ -27,7 +27,7 @@ class AdministratorTest(TestCase):
 
     def test_login(self):
         """
-        登陆成功
+        登录成功
 
         :author: lishanZheng
         :date: 2019/12/30
@@ -38,7 +38,7 @@ class AdministratorTest(TestCase):
 
     def test_login_password_error(self):
         """
-        登陆密码错误
+        登录密码错误
 
         :author: lishanZheng
         :date: 2019/12/30
@@ -51,7 +51,7 @@ class AdministratorTest(TestCase):
 
     def test_login_not_exist(self):
         """
-        登陆用户名不存在
+        登录用户名不存在
 
         :author: lishanZheng
         :date: 2019/12/30
@@ -62,7 +62,7 @@ class AdministratorTest(TestCase):
 
     def test_is_login(self):
         """
-        重复登陆
+        重复登录
 
         :author: lishanZheng
         :date: 2019/12/30
@@ -99,7 +99,7 @@ class AdministratorTest(TestCase):
 
     def test_not_login(self):
         """
-        未登陆就登出
+        未登录就登出
 
         :author: lishanZheng
         :date: 2019/12/30
