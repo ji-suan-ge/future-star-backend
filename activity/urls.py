@@ -8,6 +8,8 @@ from django.urls import path
 
 from activity import views
 
+LIST_ACTIVITY = 'list_activity'
+
 urlpatterns = [
-    path('list_activity', views.ActivityList.as_view()),
+    path(LIST_ACTIVITY, views.ActivityList.as_view()),
 ]
