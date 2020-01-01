@@ -78,7 +78,11 @@ def add(request):
         student = request.POST.get('student')
         admin = Administrator.objects.filter(account=account)
         if admin.count() > 0:
-            return result_uitl.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
+            admin_old = Administrator.objects.get(account=account)
+            if admin_old.state == 0:
+                admin_old.delete()
+            else:
+                return result_uitl.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
         privilege = Privilege.objects.create(enrollment=enrollment, semester=semester,
                                              activity=activity, student=student, super=2)
         admin = Administrator.objects.create(account=account, password=password,
