@@ -22,6 +22,8 @@ class Administrator(models.Model):
     name = models.CharField(max_length=30)
     # 权限 ID
     privilege_id = models.IntegerField()
+    # 状态
+    state = models.IntegerField(default=1)
 
 
 class Privilege(models.Model):
