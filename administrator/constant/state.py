@@ -1,5 +1,5 @@
 """
-administrator serializer
+state
 
 :author: lishanZheng
 :date: 2020/01/01

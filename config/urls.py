@@ -18,9 +18,11 @@ from django.urls import path, include
 
 ACTIVITY = 'activity/'
 ADMINISTRATOR = 'administrator/'
+STUDENT = 'student/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(ACTIVITY, include('activity.urls')),
-    path(ADMINISTRATOR, include('administrator.urls'))
+    path(ADMINISTRATOR, include('administrator.urls')),
+    path(STUDENT, include('student.urls'))
 ]
