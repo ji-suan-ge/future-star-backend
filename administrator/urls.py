@@ -4,13 +4,17 @@ urls
 :author: lishanZheng
 :date: 2019/12/28
 """
-from django.conf.urls import url
+from django.urls import path
+
 from administrator import views
 
+LIST_ADMINISTRATOR = 'list_administrator'
+
 urlpatterns = [
-    url('login', views.login, name='login'),
-    url('logout', views.logout, name='logout'),
-    url('add', views.add, name='add'),
-    url('modify_pri', views.modify_privilege, name='modify_privilege'),
-    url('delete', views.delete, name='delete'),
+    path('login', views.login),
+    path('logout', views.logout),
+    path('add', views.add),
+    path('modify_pri', views.modify_privilege),
+    path('delete', views.delete),
+    path(LIST_ADMINISTRATOR, views.AdministratorList.as_view()),
 ]
