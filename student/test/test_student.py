@@ -86,8 +86,8 @@ class StudentTest(TestCase):
         """
         res = self.client.get('/student/student',
                               data={
-                                  'page': 1,
-                                  'page_size': 1
+                                  'page_size': 2,
+                                  'page': 1
                               })
         result = res.json()
         self.assertEqual(result['code'], result_util.SUCCESS)
