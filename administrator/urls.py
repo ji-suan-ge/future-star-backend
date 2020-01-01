@@ -5,14 +5,11 @@ urls
 :date: 2019/12/28
 """
 from django.conf.urls import url
-from django.urls import path, include
-from rest_framework import routers
 from administrator import views
 
-ROUTER = routers.DefaultRouter()
 urlpatterns = [
-    path('', include(ROUTER.urls)),
-    url(r'login', views.login, name='login'),
-    url(r'logout', views.logout, name='logout'),
-    url(r'add', views.add, name='add'),
+    url('login', views.login, name='login'),
+    url('logout', views.logout, name='logout'),
+    url('add', views.add, name='add'),
+    url('modify_pri', views.modify_privilege, name='modify_privilege'),
 ]
