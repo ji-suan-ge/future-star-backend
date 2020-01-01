@@ -18,13 +18,12 @@ class AdministratorTest(TestCase):
     :author: lishanZheng
     :date: 2019/12/29
     """
+
     def setUp(self):
         password = 'test123'
         password = encrypt(password)
         Administrator.objects.create(account='test', password=password,
                                      name='admin_test', privilege_id=1)
-        Privilege.objects.create(enrollment=2, semester=2,
-                                 activity=2, student=2, super=2)
 
     def test_login(self):
         """
@@ -140,7 +139,10 @@ class AdministratorTest(TestCase):
         :author: lishanZheng
         :date: 2019/12/30
         """
+        privilege = Privilege.objects.create(enrollment=2, semester=2,
+                                             activity=2, student=2, super=2)
+        privilege.save()
         res = self.client.post('/administrator/modify_pri', data={
-            'privilege_id': 1, 'semester': 1, 'activity': 1,
+            'privilege_id': privilege.id, 'semester': 1, 'activity': 1,
             'enrollment': 1, 'student': 1})
         self.assertEqual(res.json()['code'], SUCCESS)
