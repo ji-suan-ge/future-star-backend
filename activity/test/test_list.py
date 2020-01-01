@@ -1,15 +1,15 @@
 """
-activity tests
+activity list test
 
 :author: gexuewen
-:date: 2019/12/28
+:date: 2020/01/01
 """
 from django.test import TestCase
 
 from activity.models import Activity
 import activity.urls as activity_urls
-import backend.urls as urls
 import util.result_uitl as result_util
+from config import urls
 from util.url import get_url
 
 
