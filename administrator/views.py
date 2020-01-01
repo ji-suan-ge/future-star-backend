@@ -81,9 +81,9 @@ def add(request):
                                              activity=activity, student=student, super=2)
         admin = Administrator.objects.create(account=account, password=password,
                                              name=name, privilege_id=privilege.id)
+        admin.password = ''
         privilege = PrivilegeSerializer(privilege).data
         admin = AdministratorSerializer(admin).data
-        admin.password = ''
         # 合并管理员与权限
         admin = admin.copy()
         admin.update(privilege)
