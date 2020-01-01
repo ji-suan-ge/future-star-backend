@@ -7,7 +7,7 @@ activity views
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 
-from util import result_uitl
+from util import result_util
 from util.pagination import CustomPageNumberPagination
 from activity.models import Activity
 from activity.serializers import ActivitySerializer
@@ -32,4 +32,4 @@ class ActivityList(GenericAPIView, ListModelMixin):
         :date: 2020/01/01
         """
         page = self.list(request).data
-        return result_uitl.success(page)
+        return result_util.success(page)

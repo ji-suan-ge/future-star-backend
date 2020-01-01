@@ -1,14 +1,14 @@
 """
-tests
+test administrator
 
-:author: gexuewen
-:date: 2019/12/28
+:author: lishanZheng
+:date: 2020/01/01
 """
 from django.test import TestCase
 from administrator import code
-from administrator.models import Administrator, Privilege
+from administrator.models import Administrator
 from util.encrypt import encrypt
-from util.result_uitl import SUCCESS
+from util.result_util import SUCCESS
 
 
 class AdministratorTest(TestCase):
@@ -131,21 +131,6 @@ class AdministratorTest(TestCase):
             'account': 'test', 'password': 'test123', 'name': 'test',
             'semester': 2, 'activity': 2, 'enrollment': 2, 'student': 2})
         self.assertEqual(res.json()['code'], code.ADMIN_EXIST)
-
-    def test_modify_pri(self):
-        """
-        修改管理员权限
-
-        :author: lishanZheng
-        :date: 2019/12/30
-        """
-        privilege = Privilege.objects.create(enrollment=2, semester=2,
-                                             activity=2, student=2, super=2)
-        privilege.save()
-        res = self.client.post('/administrator/modify_pri', data={
-            'privilege_id': privilege.id, 'semester': 1, 'activity': 1,
-            'enrollment': 1, 'student': 1})
-        self.assertEqual(res.json()['code'], SUCCESS)
 
     def test_delete(self):
         """
