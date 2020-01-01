@@ -32,3 +32,8 @@ class AdministratorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Administrator
         fields = '__all__'
+
+    def create(self, validated_data):
+        return Administrator.objects.create(
+            privilege=self.context["privilege"],
+            **validated_data)
