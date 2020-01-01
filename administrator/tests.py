@@ -146,3 +146,16 @@ class AdministratorTest(TestCase):
             'privilege_id': privilege.id, 'semester': 1, 'activity': 1,
             'enrollment': 1, 'student': 1})
         self.assertEqual(res.json()['code'], SUCCESS)
+
+    def test_delete(self):
+        """
+        删除管理员
+
+        :author: lishanZheng
+        :date: 2019/12/30
+        """
+        admin = Administrator.objects.create(account='test_delete', password='123',
+                                             name='admin_test', privilege_id=1)
+        admin.save()
+        res = self.client.post('/administrator/delete', data={'id': admin.id})
+        self.assertEqual(res.json()['code'], SUCCESS)
