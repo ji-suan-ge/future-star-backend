@@ -13,9 +13,11 @@ from activity.models import Activity
 from activity.serializers import ActivitySerializer
 
 
-class ActivityList(GenericAPIView, ListModelMixin):
+class ActivityViewSet(ListModelMixin,
+                      CreateModelMixin,
+                      GenericAPIView):
     """
-    activity list view
+    activity view set
 
     :author: gexuewen
     :date: 2020/01/01
@@ -31,27 +33,18 @@ class ActivityList(GenericAPIView, ListModelMixin):
         :author: gexuewen
         :date: 2020/01/01
         """
-        page = self.list(request).data
-        return result_util.success(page)
-
-
-class AddActivity(GenericAPIView, CreateModelMixin):
-    """
-    activity list view
-
-    :author: gexuewen
-    :date: 2020/01/01
-    """
-    serializer_class = ActivitySerializer
+        res = self.list(request)
+        return result_util.success(res.data)
 
     def post(self, request):
         """
-        post handler
+        create activity
 
         :author: gexuewen
         :date: 2020/01/01
         """
-        return self.create(request)
+        res = self.create(request)
+        return result_util.success(res.data)
 
 
 # class DeleteActivity(GenericAPIView, DestroyModelMixin):
