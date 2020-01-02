@@ -30,7 +30,7 @@ class StudentList(mixins.ListModelMixin,
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        queryset = Student.objects.filter(state__in=[NOT_GRADUATE, INVALID])
+        queryset = Student.objects.filter(state__in=[NOT_GRADUATE, VALID])
         semester_id = self.request.GET.get('semester_id')
         clazz_id = self.request.GET.get('clazz_id')
         if semester_id is not None:
@@ -41,7 +41,8 @@ class StudentList(mixins.ListModelMixin,
                 clazz_id_list = clazz_set_to_list(clazz_set)
                 student_set = ClazzStudent.objects.filter(clazz_id__in=clazz_id_list)
             student_list = student_set_to_list(student_set)
-            queryset = Student.objects.filter(id__in=student_list, state__in=[1, 2])
+            queryset = Student.objects.filter(id__in=student_list,
+                                              state__in=[NOT_GRADUATE, VALID])
         return queryset
 
     def get(self, request):
@@ -70,6 +71,12 @@ class StudentDetailViewSet(UpdateModelMixin,
     lookup_url_kwarg = 'primary_key'
 
     def delete(self, request, primary_key):
+        """
+        delete student
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
         self.destroy(request, primary_key)
         return result_util.success_empty()
 

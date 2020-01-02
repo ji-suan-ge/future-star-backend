@@ -32,7 +32,7 @@ class StudentTest(TestCase):
         'previous_company': '阿里',
         'previous_position': 'CWO',
         'state': 2}
-
+    student_id = 1
     company_data = {
         'name': '郑公司',
         'website': 'zheng.com',
@@ -83,6 +83,7 @@ class StudentTest(TestCase):
         company.save()
         student = Student(company_id=company.id, **self.student_data)
         student.save()
+        self.student_id = student.id
         evaluation = Evaluation(**self.evaluation_data)
         evaluation.save()
         application = ApplicationInformation(**self.application_data)
@@ -134,3 +135,16 @@ class StudentTest(TestCase):
         self.assertEqual(len(results.get('results')), 1)
         self.assertEqual(results.get('results')[0].get('name'), '郑小鸽')
         self.assertEqual(result['code'], result_util.SUCCESS)
+
+    def test_delete_student(self):
+        """
+        删除指定校友
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
+        res = self.client.delete('/student/student/' + str(self.student_id))
+        result = res.json()
+        self.assertEqual(result['code'], result_util.SUCCESS)
+        student = Student.objects.get(id=self.student_id)
+        self.assertEqual(student.state, 0)
