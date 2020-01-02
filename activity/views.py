@@ -5,7 +5,7 @@ activity views
 :date: 2019/12/28
 """
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin
 
 from util import result_util
 from util.pagination import CustomPageNumberPagination
@@ -13,9 +13,11 @@ from activity.models import Activity
 from activity.serializers import ActivitySerializer
 
 
-class ActivityList(GenericAPIView, ListModelMixin):
+class ActivityViewSet(ListModelMixin,
+                      CreateModelMixin,
+                      GenericAPIView):
     """
-    activity list view
+    activity view set
 
     :author: gexuewen
     :date: 2020/01/01
@@ -31,28 +33,42 @@ class ActivityList(GenericAPIView, ListModelMixin):
         :author: gexuewen
         :date: 2020/01/01
         """
-        page = self.list(request).data
-        return result_util.success(page)
-
-
-class AddActivity(GenericAPIView, CreateModelMixin):
-    """
-    activity list view
-
-    :author: gexuewen
-    :date: 2020/01/01
-    """
-    serializer_class = ActivitySerializer
+        res = self.list(request)
+        return result_util.success(res.data)
 
     def post(self, request):
         """
-        post handler
+        create activity
 
         :author: gexuewen
         :date: 2020/01/01
         """
-        return self.create(request)
+        res = self.create(request)
+        return result_util.success(res.data)
 
+
+class ActivityDetailViewSet(UpdateModelMixin,
+                            GenericAPIView):
+    """
+    activity detail view set
+
+    :author: gexuewen
+    :date: 2020/01/02
+    """
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update activity
+
+        :author: gexuewen
+        :date: 2020/01/02
+        """
+        res = self.partial_update(request, primary_key)
+        return result_util.success(res.data)
 
 # class DeleteActivity(GenericAPIView, DestroyModelMixin):
 #     """
