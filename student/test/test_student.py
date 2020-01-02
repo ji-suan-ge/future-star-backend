@@ -148,3 +148,23 @@ class StudentTest(TestCase):
         self.assertEqual(result['code'], result_util.SUCCESS)
         student = Student.objects.get(id=self.student_id)
         self.assertEqual(student.state, 0)
+
+    def test_modify_student(self):
+        """
+        修改校友信息
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
+        res = self.client.put('/student/student/' + str(self.student_id),
+                              data={'name': 'XXX',
+                                    'company': {
+                                        'name': 'XX'
+                                    }},
+                              content_type="application/json")
+        result = res.json()
+        self.assertEqual(result['code'], result_util.SUCCESS)
+        student = Student.objects.get(id=self.student_id)
+        self.assertEqual(student.name, 'XXX')
+        company = student.company
+        self.assertEqual(company.name, 'XX')
