@@ -12,7 +12,7 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 from clazz.models import Clazz, ClazzStudent
 from student.constant.state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student
-from student.serializers import StudentSerializer
+from student.serializers import StudentSerializer, CompanySerializer
 from util import result_util
 from util.pagination import CustomPageNumberPagination
 
@@ -83,15 +83,28 @@ class StudentDetailViewSet(UpdateModelMixin,
     def perform_destroy(self, instance):
         instance.state = INVALID
         instance.save()
-    # def put(self, request, primary_key):
-    #     """
-    #     update activity
-    #
-    #     :author: lishanZheng
-    #     :date: 2020/01/02
-    #     """
-    #     res = self.partial_update(request, primary_key)
-    #     return result_util.success(res.data)
+
+    def put(self, request):
+        """
+        update student
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
+        student = self.get_object()
+        data = request.data
+        company_data = data.get("company")
+        company_serializer = CompanySerializer(data=company_data,
+                                               partial=True,
+                                               instance=student.company)
+        if company_serializer.is_valid():
+            company_serializer.save()
+        student_serializer = StudentSerializer(data=data,
+                                               partial=True,
+                                               instance=student)
+        if student_serializer.is_valid():
+            student_serializer.save()
+        return result_util.success(student_serializer.data)
 
 
 def clazz_set_to_list(clazz_set):
