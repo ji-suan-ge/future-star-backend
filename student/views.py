@@ -33,6 +33,7 @@ class StudentList(mixins.ListModelMixin,
         queryset = Student.objects.filter(state__in=[NOT_GRADUATE, VALID])
         semester_id = self.request.GET.get('semester_id')
         clazz_id = self.request.GET.get('clazz_id')
+        name = self.request.GET.get('name')
         if semester_id is not None:
             if clazz_id is not None:
                 student_set = ClazzStudent.objects.filter(clazz_id=clazz_id)
@@ -43,6 +44,8 @@ class StudentList(mixins.ListModelMixin,
             student_list = student_set_to_list(student_set)
             queryset = Student.objects.filter(id__in=student_list,
                                               state__in=[NOT_GRADUATE, VALID])
+        if name is not None:
+            queryset = Student.objects.filter(name__contains=name)
         return queryset
 
     def get(self, request):
