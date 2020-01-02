@@ -23,6 +23,12 @@ class ActivitySerializer(ModelSerializer):
 
 
 class ActivityStudentSerializer(ModelSerializer):
+    """
+    activity student serializer
+
+    :author: gexuewen
+    :date: 2020/01/02
+    """
     student = StudentSerializer(many=False, read_only=True)
     activity = ActivitySerializer(many=False, read_only=True)
 

@@ -8,6 +8,7 @@ from django.test import TestCase
 
 import util.result_util as result_util
 from activity.models import Activity
+from activity.test.generate.activity import get_activity_data
 
 
 class TestActivityAdd(TestCase):
@@ -18,18 +19,7 @@ class TestActivityAdd(TestCase):
     :date: 2020/01/02
     """
 
-    activity_data = {
-        'name': 'before modify',
-        'enroll_start_time': '2020-10-01',
-        'enroll_end_time': '2020-10-02',
-        'organizer': 'heh',
-        'start_time': '2020-10-05',
-        'address': 'an hui',
-        'arrangement': 'Day3: nothing',
-        'price': 200,
-        'people_number_limit': 60,
-        'current_people_number': 50
-    }
+    activity_data = get_activity_data()
 
     def setUp(self):
         activity_data = self.activity_data

@@ -6,6 +6,7 @@ activity models
 """
 from django.db import models
 
+from activity.constant.activity_student_state import WAIT_FOR_PAY, PAID
 from clazz.models import Clazz
 from student.models import Student
 
@@ -49,8 +50,8 @@ class ActivityStudent(models.Model):
     :date: 2019/12/28
     """
     STATE_CHOICE = (
-        (0, 'WAIT_FOR_PAY'),
-        (1, 'PAID')
+        (WAIT_FOR_PAY, 'WAIT_FOR_PAY'),
+        (PAID, 'PAID')
     )
     # 活动
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
