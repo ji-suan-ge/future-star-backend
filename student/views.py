@@ -6,7 +6,11 @@ views
 """
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
+
 from clazz.models import Clazz, ClazzStudent
+from student.constant.state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student
 from student.serializers import StudentSerializer
 from util import result_util
@@ -26,7 +30,7 @@ class StudentList(mixins.ListModelMixin,
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        queryset = Student.objects.filter(state__in=[1, 2])
+        queryset = Student.objects.filter(state__in=[NOT_GRADUATE, VALID])
         semester_id = self.request.GET.get('semester_id')
         clazz_id = self.request.GET.get('clazz_id')
         if semester_id is not None:
@@ -37,7 +41,8 @@ class StudentList(mixins.ListModelMixin,
                 clazz_id_list = clazz_set_to_list(clazz_set)
                 student_set = ClazzStudent.objects.filter(clazz_id__in=clazz_id_list)
             student_list = student_set_to_list(student_set)
-            queryset = Student.objects.filter(id__in=student_list, state__in=[1, 2])
+            queryset = Student.objects.filter(id__in=student_list,
+                                              state__in=[NOT_GRADUATE, VALID])
         return queryset
 
     def get(self, request):
@@ -49,6 +54,44 @@ class StudentList(mixins.ListModelMixin,
         """
         page = self.list(request).data
         return result_util.success(page)
+
+
+class StudentDetailViewSet(UpdateModelMixin,
+                           DestroyModelMixin,
+                           GenericAPIView):
+    """
+    student detail view set
+
+    :author: lishanZheng
+    :date: 2020/01/02
+    """
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def delete(self, request, primary_key):
+        """
+        delete student
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
+        self.destroy(request, primary_key)
+        return result_util.success_empty()
+
+    def perform_destroy(self, instance):
+        instance.state = INVALID
+        instance.save()
+    # def put(self, request, primary_key):
+    #     """
+    #     update activity
+    #
+    #     :author: lishanZheng
+    #     :date: 2020/01/02
+    #     """
+    #     res = self.partial_update(request, primary_key)
+    #     return result_util.success(res.data)
 
 
 def clazz_set_to_list(clazz_set):
