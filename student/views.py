@@ -84,7 +84,7 @@ class StudentDetailViewSet(UpdateModelMixin,
         instance.state = INVALID
         instance.save()
 
-    def put(self, request):
+    def put(self, request, primary_key):
         """
         update student
 
@@ -92,8 +92,11 @@ class StudentDetailViewSet(UpdateModelMixin,
         :date: 2020/01/02
         """
         student = self.get_object()
+        if student.id != primary_key:
+            pass
         data = request.data
         company_data = data.get("company")
+
         company_serializer = CompanySerializer(data=company_data,
                                                partial=True,
                                                instance=student.company)
