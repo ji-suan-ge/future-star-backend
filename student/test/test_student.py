@@ -103,5 +103,5 @@ class StudentTest(TestCase):
         result = res.json()
         results = result.get('data')
         self.assertEqual(len(results.get('results')), 1)
-        self.assertEqual(results.get('results')[0].get('name'), '郑小鸽')
+        self.assertEqual(results.get('results')[0].get('name'), self.student_data.get('name'))
         self.assertEqual(result['code'], result_util.SUCCESS)
