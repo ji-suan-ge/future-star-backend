@@ -56,7 +56,7 @@ class ActivityStudent(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     # 校友
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    # 活动状态
+    # 缴费状态
     state = models.IntegerField(choices=STATE_CHOICE)
 
 
