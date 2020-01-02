@@ -27,7 +27,8 @@ class TestActivityAdd(TestCase):
         'arrangement': 'Day2: nothing',
         'price': 200,
         'people_number_limit': 60,
-        'current_people_number': 20}
+        'current_people_number': 20
+    }
 
     def test_add_activity(self):
         """

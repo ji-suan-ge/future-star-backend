@@ -57,16 +57,7 @@ class TestActivityList(TestCase):
 
     def setUp(self):
         for activity_data in self.activities_data:
-            activity = Activity(name=activity_data['name'],
-                                enroll_start_time=activity_data['enroll_start_time'],
-                                enroll_end_time=activity_data['enroll_end_time'],
-                                organizer=activity_data['organizer'],
-                                start_time=activity_data['start_time'],
-                                address=activity_data['address'],
-                                arrangement=activity_data['arrangement'],
-                                price=activity_data['price'],
-                                current_people_number=activity_data['current_people_number'],
-                                people_number_limit=activity_data['people_number_limit'])
+            activity = Activity(**activity_data)
             activity.save()
 
     def test_activity_list(self):
