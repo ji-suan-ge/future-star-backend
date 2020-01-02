@@ -8,6 +8,10 @@ from django.test import TestCase
 
 from clazz.models import ClazzStudent, Clazz
 from semester.models import Semester
+from student.generate.application import get_application_data
+from student.generate.company import get_company_data
+from student.generate.evaluation import get_evaluation_data
+from student.generate.student import get_student_data
 from student.models import Company, Student, Evaluation, ApplicationInformation
 from util import result_util
 
@@ -19,46 +23,11 @@ class StudentTest(TestCase):
     :author: lishanZheng
     :date: 2020/01/01
     """
-    student_data = {
-        'name': '郑小鸽',
-        'gender': 0,
-        'birthday': '2020-01-01',
-        'phone_number': '15256530000',
-        'wx': '6028',
-        'email': '60@qq.com',
-        'city': '福建',
-        'education': 'PhD',
-        'school': 'HFU',
-        'previous_company': '阿里',
-        'previous_position': 'CWO',
-        'state': 2}
+    student_data = get_student_data()
+    company_data = get_company_data()
     student_id = 1
-    company_data = {
-        'name': '郑公司',
-        'website': 'zheng.com',
-        'wx_public': 'zheng',
-        'create_time': '2020-01-01',
-        'city': '福建',
-        'number_employee': 1000,
-        'position': 'CTO',
-        'introduction': '我是郑总的公司',
-        'company_data': '10E',
-        'income_scale': '收入1E',
-        'financing_situation': 'others',
-        'value_of_assessment': '100E'
-    }
-
-    evaluation_data = {
-        'fraction': 0,
-        'description': '未评价'
-    }
-
-    application_data = {
-        'accept_absence': 0,
-        'reason_application': '申请理由',
-        'contribution_for_us': '我的贡献',
-        'way': 'wx'
-    }
+    evaluation_data = get_evaluation_data()
+    application_data = get_application_data()
 
     clazz_data = {
         'name': '班级名字',
@@ -133,7 +102,7 @@ class StudentTest(TestCase):
         result = res.json()
         results = result.get('data')
         self.assertEqual(len(results.get('results')), 1)
-        self.assertEqual(results.get('results')[0].get('name'), '郑小鸽')
+        self.assertEqual(results.get('results')[0].get('name'), self.student_data.get('name'))
         self.assertEqual(result['code'], result_util.SUCCESS)
 
     def test_delete_student(self):
@@ -180,9 +149,9 @@ class StudentTest(TestCase):
                               data={
                                   'page_size': 2,
                                   'page': 1,
-                                  'name': '郑小',
+                                  'name': self.student_data.get('name'),
                               })
         result = res.json()
         self.assertEqual(result['code'], result_util.SUCCESS)
         student = Student.objects.get(id=self.student_id)
-        self.assertEqual(student.name, '郑小鸽')
+        self.assertEqual(student.name, self.student_data.get('name'))

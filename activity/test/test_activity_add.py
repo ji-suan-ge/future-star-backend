@@ -7,6 +7,7 @@ add activity test
 from django.test import TestCase
 
 import util.result_util as result_util
+from activity.test.generate.activity import get_activity_data
 
 
 class TestActivityAdd(TestCase):
@@ -17,18 +18,7 @@ class TestActivityAdd(TestCase):
     :date: 2020/01/02
     """
 
-    activity_data = {
-        'name': 'activity 1',
-        'enroll_start_time': '2020-12-01',
-        'enroll_end_time': '2020-12-02',
-        'organizer': 'heh',
-        'start_time': '2020-12-05',
-        'address': 'an hui he fei',
-        'arrangement': 'Day2: nothing',
-        'price': 200,
-        'people_number_limit': 60,
-        'current_people_number': 20
-    }
+    activity_data = get_activity_data()
 
     def test_add_activity(self):
         """
@@ -43,5 +33,5 @@ class TestActivityAdd(TestCase):
         self.assertEqual(res.get('code'), result_util.SUCCESS)
         activity = res.get('data')
         self.assertIsNotNone(activity)
-        self.assertEqual(activity.get('name'), 'activity 1')
-        self.assertEqual(activity.get('price'), 200)
+        self.assertEqual(activity.get('name'), self.activity_data.get('name'))
+        self.assertEqual(activity.get('price'), self.activity_data.get('price'))

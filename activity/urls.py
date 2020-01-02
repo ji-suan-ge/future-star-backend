@@ -5,10 +5,11 @@ activity urls
 :date: 2020/01/01
 """
 from django.urls import path
-from activity import views
+from activity.views import activity as activity_view
+from activity.views import student as student_view
 
 urlpatterns = [
-    path('activity', views.ActivityViewSet.as_view()),
-    path('activity/<int:primary_key>', views.ActivityDetailViewSet.as_view())
-    # path('delete/<int:id>', views.DeleteActivity.as_view())
+    path('activity', activity_view.ActivityViewSet.as_view()),
+    path('activity/<int:primary_key>', activity_view.ActivityDetailViewSet.as_view()),
+    path('student', student_view.ActivityStudentViewSet.as_view())
 ]
