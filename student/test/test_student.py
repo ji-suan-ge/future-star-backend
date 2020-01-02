@@ -168,3 +168,21 @@ class StudentTest(TestCase):
         self.assertEqual(student.name, 'XXX')
         company = student.company
         self.assertEqual(company.name, 'XX')
+
+    def test_get_student_by_name(self):
+        """
+        按校友姓名获取校友
+
+        :author: lishanZheng
+        :date: 2020/01/02
+        """
+        res = self.client.get('/student/student',
+                              data={
+                                  'page_size': 2,
+                                  'page': 1,
+                                  'name': '郑小',
+                              })
+        result = res.json()
+        self.assertEqual(result['code'], result_util.SUCCESS)
+        student = Student.objects.get(id=self.student_id)
+        self.assertEqual(student.name, '郑小鸽')
