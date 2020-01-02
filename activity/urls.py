@@ -9,5 +9,6 @@ from activity import views
 
 urlpatterns = [
     path('activity', views.ActivityViewSet.as_view()),
+    path('activity/<int:primary_key>', views.ActivityDetailViewSet.as_view())
     # path('delete/<int:id>', views.DeleteActivity.as_view())
 ]

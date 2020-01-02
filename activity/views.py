@@ -5,7 +5,7 @@ activity views
 :date: 2019/12/28
 """
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin
 
 from util import result_util
 from util.pagination import CustomPageNumberPagination
@@ -46,6 +46,29 @@ class ActivityViewSet(ListModelMixin,
         res = self.create(request)
         return result_util.success(res.data)
 
+
+class ActivityDetailViewSet(UpdateModelMixin,
+                            GenericAPIView):
+    """
+    activity detail view set
+
+    :author: gexuewen
+    :date: 2020/01/02
+    """
+    queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update activity
+
+        :author: gexuewen
+        :date: 2020/01/02
+        """
+        res = self.partial_update(request, primary_key)
+        return result_util.success(res.data)
 
 # class DeleteActivity(GenericAPIView, DestroyModelMixin):
 #     """
