@@ -11,7 +11,7 @@ from activity.test.generate.activity import get_activity_data
 from clazz.models import Clazz
 from clazz.test.generate.clazz import get_clazz_data
 from semester.models import Semester
-from semester.test.generate.generate import get_semester_data
+from semester.test.generate.semester import get_semester_data
 from util import result_util
 
 

@@ -7,11 +7,11 @@ tests
 from django.test import TestCase
 
 from semester.models import Semester
-from semester.test.generate.generate import get_semester_data
+from semester.test.generate.semester import get_semester_data
 from util import result_util
 
 
-class TestSemesterAdd(TestCase):
+class TestSemester(TestCase):
     """
     添加学期测试
 
