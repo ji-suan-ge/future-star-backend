@@ -4,25 +4,25 @@ activity views
 :author: gexuewen
 :date: 2019/12/28
 """
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin
+from rest_framework import mixins, generics
 
-from util import result_util
-from util.pagination import CustomPageNumberPagination
+from activity.constant.activity_state import CLOSED_ACTIVITY, OPEN_ACTIVITY
 from activity.models import Activity
 from activity.serializers import ActivitySerializer
+from util import result_util
+from util.pagination import CustomPageNumberPagination
 
 
-class ActivityViewSet(ListModelMixin,
-                      CreateModelMixin,
-                      GenericAPIView):
+class ActivityViewSet(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      generics.GenericAPIView):
     """
     activity view set
 
     :author: gexuewen
     :date: 2020/01/01
     """
-    queryset = Activity.objects.all()
+    queryset = Activity.objects.filter(state=OPEN_ACTIVITY)
     serializer_class = ActivitySerializer
     pagination_class = CustomPageNumberPagination
 
@@ -47,15 +47,16 @@ class ActivityViewSet(ListModelMixin,
         return result_util.success(res.data)
 
 
-class ActivityDetailViewSet(UpdateModelMixin,
-                            GenericAPIView):
+class ActivityDetailViewSet(mixins.UpdateModelMixin,
+                            mixins.DestroyModelMixin,
+                            generics.GenericAPIView):
     """
     activity detail view set
 
     :author: gexuewen
     :date: 2020/01/02
     """
-    queryset = Activity.objects.all()
+    queryset = Activity.objects.filter(state=OPEN_ACTIVITY)
     serializer_class = ActivitySerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'primary_key'
@@ -70,20 +71,16 @@ class ActivityDetailViewSet(UpdateModelMixin,
         res = self.partial_update(request, primary_key)
         return result_util.success(res.data)
 
-# class DeleteActivity(GenericAPIView, DestroyModelMixin):
-#     """
-#     activity list view
-#
-#     :author: gexuewen
-#     :date: 2020/01/01
-#     """
-#     serializer_class = ActivitySerializer
-#     queryset = Activity.objects.all()
-#     lookup_field = 'id'
-#
-#     def delete(self, request, id):
-#         return self.destroy(request)
-#
-#     def perform_destroy(self, instance):
-#         instance.state = 1
-#         instance.save()
+    def delete(self, request, primary_key):
+        """
+        cancel activity
+
+        :author: gexuewen
+        :date: 2020/01/02
+        """
+        self.destroy(request, primary_key)
+        return result_util.success_empty()
+
+    def perform_destroy(self, instance):
+        instance.state = CLOSED_ACTIVITY
+        instance.save()
