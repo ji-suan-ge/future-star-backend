@@ -12,6 +12,7 @@ from activity.models import Activity, ActivityClazz
 from activity.serializers import ActivityClazzSerializer
 from clazz.models import Clazz
 from util import result_util
+from util.pagination import CustomPageNumberPagination
 
 
 class ActivityClazzViewSet(ListModelMixin,
@@ -23,6 +24,8 @@ class ActivityClazzViewSet(ListModelMixin,
     :author: gexuewen
     :date: 2020/01/03
     """
+    pagination_class = CustomPageNumberPagination
+    serializer_class = ActivityClazzSerializer
 
     def __init__(self):
         super(ActivityClazzViewSet, self).__init__()
@@ -33,8 +36,6 @@ class ActivityClazzViewSet(ListModelMixin,
         activity_id = self.request.query_params.get('activity_id')
         return ActivityClazz.objects.filter(activity_id=activity_id)
 
-    serializer_class = ActivityClazzSerializer
-
     def get(self, request):
         """
         get activity clazz
@@ -42,13 +43,14 @@ class ActivityClazzViewSet(ListModelMixin,
         :author: gexuewen
         :date: 2020/01/03
         """
-        res = self.list(self, request)
+        res = self.list(request)
         data = res.data
-        data_iter = map(lambda ac: {
-            'id': ac.get('id'),
-            'clazz': ac.get('clazz')
-        }, data)
-        data = list(data_iter)
+        results = data.get('results')
+        target_results = list(map(lambda result: result.get('clazz'), results))
+        data = {
+            'count': data.get('count'),
+            'results': target_results
+        }
         return result_util.success(data)
 
     def post(self, request):
