@@ -6,7 +6,7 @@ activity student add test
 """
 from activity.constant.activity_student_state import WAIT_FOR_PAY
 from activity.constant.code import ALREADY_JOIN
-from activity.test.base_test.activity_student import ActivityStudentBaseTest
+from activity.test.test_activity_student.activity_student import ActivityStudentBaseTest
 from util import result_util
 
 

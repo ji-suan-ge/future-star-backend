@@ -18,7 +18,8 @@ class TestActivityAdd(TestCase):
     :date: 2020/01/02
     """
 
-    activity_data = get_activity_data()
+    def setUp(self):
+        self.activity_data = get_activity_data()
 
     def test_add_activity(self):
         """

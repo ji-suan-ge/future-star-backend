@@ -19,9 +19,8 @@ class TestActivityList(TestCase):
     :date: 2020/01/01
     """
 
-    activities_data = []
-
     def setUp(self):
+        self.activities_data = []
         for i in range(0, 3):
             if i == -1:
                 pass
