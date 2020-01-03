@@ -46,7 +46,11 @@ class ActivityClazzViewSet(ListModelMixin,
                                                       clazz_id=clazz_id)
         if activity_clazz.count() > 0:
             return result_util.error(CLAZZ_ALREADY_IN, '此班级已经在活动列表中')
-        activity_clazz = ActivityClazz.objects.create(**request.data)
+        data = {
+            'activity_id': activity_id,
+            'clazz_id': clazz_id
+        }
+        activity_clazz = ActivityClazz.objects.create(**data)
         activity_clazz_serializer = self.get_serializer(instance=activity_clazz)
         return result_util.success(activity_clazz_serializer.data)
 
