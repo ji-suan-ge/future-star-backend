@@ -12,7 +12,7 @@ from clazz.models import Clazz
 # get as obtain, make pylint happy again
 from clazz.test.generate.clazz import get_clazz_data as obtain_clazz_data
 from semester.models import Semester
-from semester.test.generate.generate import get_semester_data
+from semester.test.generate.semester import get_semester_data
 from util import result_util
 
 
