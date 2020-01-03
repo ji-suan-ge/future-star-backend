@@ -8,9 +8,11 @@ from django.urls import path
 
 from activity.views import activity as activity_view
 from activity.views import student as student_view
+from activity.views import clazz as clazz_view
 
 urlpatterns = [
     path('activity', activity_view.ActivityViewSet.as_view()),
     path('activity/<int:primary_key>', activity_view.ActivityDetailViewSet.as_view()),
-    path('student', student_view.ActivityStudentViewSet.as_view())
+    path('student', student_view.ActivityStudentViewSet.as_view()),
+    path('clazz', clazz_view.ActivityClazzViewSet.as_view())
 ]
