@@ -30,8 +30,18 @@ class SemesterViewSet(ListModelMixin,
         """
         create semester
 
-        :author: gexuewen
-        :date: 2020/01/01
+        :author: lishanZheng
+        :date: 2020/01/02
         """
         res = self.create(request)
+        return result_util.success(res.data)
+
+    def get(self, request):
+        """
+        get semester list
+
+        :author: lishanZheng
+        :date: 2020/01/03
+        """
+        res = self.list(request)
         return result_util.success(res.data)
