@@ -17,6 +17,7 @@ class TestActivityStudentList(ActivityStudentBaseTest):
     :author: gexuewen
     :date: 2020/01/02
     """
+
     def __init__(self, method_name):
         super(TestActivityStudentList, self).__init__(method_name)
         self.activity_to_add = None

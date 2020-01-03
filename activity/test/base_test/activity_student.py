@@ -20,6 +20,7 @@ class ActivityStudentBaseTest(TestCase):
     :author: gexuewen
     :date: 2020/01/02
     """
+
     def __init__(self, method_name):
         super(ActivityStudentBaseTest, self).__init__(method_name)
         self.activities_data = []

@@ -17,6 +17,7 @@ class TestActivityStudentJoin(ActivityStudentBaseTest):
     :author: gexuewen
     :date: 2020/01/02
     """
+
     def setUp(self):
         super(TestActivityStudentJoin, self).setUp()
         self.activity_to_join = self.activities[0]
