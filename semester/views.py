@@ -69,7 +69,8 @@ class SemesterDetailViewSet(mixins.UpdateModelMixin,
         :author: lishanZheng
         :date: 2020/01/03
         """
-        res = self.partial_update(request, primary_key)
+        key = primary_key
+        res = self.partial_update(request, key)
         return result_util.success(res.data)
 
     # def delete(self, request, primary_key):
