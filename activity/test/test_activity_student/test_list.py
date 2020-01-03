@@ -6,7 +6,7 @@ activity student list test
 """
 from activity.constant.activity_student_state import WAIT_FOR_PAY
 from activity.models import ActivityStudent
-from activity.test.base_test.activity_student import ActivityStudentBaseTest
+from activity.test.test_activity_student.activity_student import ActivityStudentBaseTest
 from util import result_util
 
 
@@ -17,13 +17,11 @@ class TestActivityStudentList(ActivityStudentBaseTest):
     :author: gexuewen
     :date: 2020/01/02
     """
-    def __init__(self, method_name):
-        super(TestActivityStudentList, self).__init__(method_name)
-        self.activity_to_add = None
-        self.activity_students = []
 
     def setUp(self):
         super(TestActivityStudentList, self).setUp()
+        self.activity_to_add = None
+        self.activity_students = []
         self.activity_to_add = self.activities[0]
         # 将前6个学生加入第2个活动中
         for student in self.students:

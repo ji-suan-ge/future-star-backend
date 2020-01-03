@@ -6,7 +6,7 @@ activity student add test
 """
 from activity.constant.activity_student_state import WAIT_FOR_PAY
 from activity.constant.code import ALREADY_JOIN
-from activity.test.base_test.activity_student import ActivityStudentBaseTest
+from activity.test.test_activity_student.activity_student import ActivityStudentBaseTest
 from util import result_util
 
 
@@ -17,6 +17,7 @@ class TestActivityStudentJoin(ActivityStudentBaseTest):
     :author: gexuewen
     :date: 2020/01/02
     """
+
     def setUp(self):
         super(TestActivityStudentJoin, self).setUp()
         self.activity_to_join = self.activities[0]

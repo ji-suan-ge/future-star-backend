@@ -15,19 +15,17 @@ from student.models import Student, Company
 
 class ActivityStudentBaseTest(TestCase):
     """
-    分页获取活动校友测试
+    活动校友测试
 
     :author: gexuewen
     :date: 2020/01/02
     """
-    def __init__(self, method_name):
-        super(ActivityStudentBaseTest, self).__init__(method_name)
+
+    def setUp(self):
         self.activities_data = []
         self.activities = []
         self.students_data = []
         self.students = []
-
-    def setUp(self):
         # 生成三个活动
         for i in range(0, 3):
             activity_data = get_activity_data()

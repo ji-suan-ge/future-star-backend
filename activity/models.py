@@ -6,6 +6,7 @@ activity models
 """
 from django.db import models
 
+from activity.constant.activity_state import OPEN_ACTIVITY
 from activity.constant.activity_student_state import WAIT_FOR_PAY, PAID
 from clazz.models import Clazz
 from student.models import Student
@@ -39,7 +40,7 @@ class Activity(models.Model):
     # 人数限制
     people_number_limit = models.IntegerField(blank=False, default=0)
     # 活动状态
-    state = models.IntegerField(default=0)
+    state = models.IntegerField(default=OPEN_ACTIVITY)
 
 
 class ActivityStudent(models.Model):
