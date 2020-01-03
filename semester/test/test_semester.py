@@ -18,6 +18,7 @@ class TestSemesterAdd(TestCase):
     :author: lishanZheng
     :date: 2020/01/02
     """
+
     def setUp(self):
         self.semester_data = get_semester_data()
         semester = Semester(**self.semester_data)
@@ -49,8 +50,9 @@ class TestSemesterAdd(TestCase):
         """
         self.semester_data['period_semester'] = 3
         self.semester_data['subject'] = 'modify'
-        res = self.client.post('/semester/semester' + str(self.semester.id),
-                               data=self.semester_data)
+        res = self.client.put('/semester/semester/' + str(self.semester.id),
+                              data=self.semester_data,
+                              content_type="application/x-www-form-urlencoded")
         res = res.json()
         self.assertEqual(res.get('code'), result_util.SUCCESS)
         semester_get = res.get('data')
