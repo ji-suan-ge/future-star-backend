@@ -78,6 +78,10 @@ class Resource(models.Model):
         (1, 'PPT'),
         (2, '视频')
     )
+    STATE = (
+        (0, '开放'),
+        (1, '关闭')
+    )
     # 目录
     content = models.ForeignKey(Content, on_delete=models.CASCADE)
     # 资料的类型
@@ -86,3 +90,4 @@ class Resource(models.Model):
     name = models.CharField(max_length=30, blank=False)
     url = models.CharField(max_length=30)
     word = models.TextField()
+    state = models.IntegerField(default=1, blank=False, choices=STATE)
