@@ -20,11 +20,13 @@ ACTIVITY = 'activity/'
 ADMINISTRATOR = 'administrator/'
 STUDENT = 'student/'
 SEMESTER = 'semester/'
+COURSE = 'course/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(ACTIVITY, include('activity.urls')),
     path(ADMINISTRATOR, include('administrator.urls')),
     path(STUDENT, include('student.urls')),
-    path(SEMESTER, include('semester.urls'))
+    path(SEMESTER, include('semester.urls')),
+    path(COURSE, include('course.urls'))
 ]
