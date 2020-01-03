@@ -5,6 +5,7 @@ activity serializers
 :date: 2020/01/01
 """
 from rest_framework.serializers import ModelSerializer
+
 from activity.models import Activity, ActivityStudent
 from student.serializers import StudentSerializer
 
@@ -35,3 +36,8 @@ class ActivityStudentSerializer(ModelSerializer):
     class Meta:
         model = ActivityStudent
         fields = '__all__'
+
+    def create(self, validated_data):
+        return ActivityStudent.objects.create(activity=self.context["activity"],
+                                              student=self.context['student'],
+                                              **validated_data)
