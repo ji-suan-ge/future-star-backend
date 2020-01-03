@@ -8,7 +8,7 @@ from django.test import TestCase
 
 import util.result_util as result_util
 from semester.models import Semester
-from semester.test.generate.generate import get_semester_data
+from semester.test.generate.semester import get_semester_data
 
 
 class TestSemesterList(TestCase):

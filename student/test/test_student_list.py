@@ -7,7 +7,7 @@ student list tests
 from django.test import TestCase
 from clazz.models import Clazz, ClazzStudent
 from semester.models import Semester
-from semester.test.generate.generate import get_semester_data
+from semester.test.generate.semester import get_semester_data
 from student.generate.application import get_application_data
 from student.generate.company import get_company_data
 from student.generate.evaluation import get_evaluation_data
