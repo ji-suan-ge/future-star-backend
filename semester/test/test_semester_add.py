@@ -6,6 +6,8 @@ tests
 """
 from django.test import TestCase
 
+from semester.models import Semester
+from semester.test.generate.generate import get_semester_data
 from util import result_util
 
 
@@ -17,10 +19,6 @@ class TestSemesterAdd(TestCase):
     :date: 2020/01/02
     """
 
-    semester_data = {'period_semester': 1,
-                     'subject': '测试主题',
-                     'introduction': '测试介绍'}
-
     def test_add_semester(self):
         """
         添加学期
@@ -28,11 +26,13 @@ class TestSemesterAdd(TestCase):
         :author: lishanZheng
         :date: 2020/01/02
         """
+        semester_data = get_semester_data()
+        semester = Semester(**semester_data)
         res = self.client.post('/semester/semester',
-                               data=self.semester_data)
+                               data=semester_data)
         res = res.json()
         self.assertEqual(res.get('code'), result_util.SUCCESS)
-        semester = res.get('data')
-        self.assertIsNotNone(semester)
-        self.assertEqual(semester.get('subject'), '测试主题')
-        self.assertEqual(semester.get('introduction'), '测试介绍')
+        semester_get = res.get('data')
+        self.assertIsNotNone(semester_get)
+        self.assertEqual(semester_get.get('subject'), semester.subject)
+        self.assertEqual(semester_get.get('introduction'), semester.introduction)
