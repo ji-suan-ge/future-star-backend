@@ -29,7 +29,27 @@ class ActivityClazzViewSet(ListModelMixin,
         self.activity = None
         self.clazz = None
 
+    def get_queryset(self):
+        activity_id = self.request.query_params.get('activity_id')
+        return ActivityClazz.objects.filter(activity_id=activity_id)
+
     serializer_class = ActivityClazzSerializer
+
+    def get(self, request):
+        """
+        get activity clazz
+
+        :author: gexuewen
+        :date: 2020/01/03
+        """
+        res = self.list(self, request)
+        data = res.data
+        data_iter = map(lambda ac: {
+            'id': ac.get('id'),
+            'clazz': ac.get('clazz')
+        }, data)
+        data = list(data_iter)
+        return result_util.success(data)
 
     def post(self, request):
         """
