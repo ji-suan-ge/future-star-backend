@@ -10,4 +10,5 @@ from semester import views
 
 urlpatterns = [
     path('semester', views.SemesterViewSet.as_view()),
+    path('semester/<int:primary_key>', views.SemesterDetailViewSet.as_view())
 ]
