@@ -46,8 +46,13 @@ class ActivityStudentViewSet(ListModelMixin,
         :author: gexuewen
         :date: 2020/01/02
         """
-        page = self.list(request).data
-        return result_util.success(page)
+        data = self.list(request).data
+        target_results = map(lambda result: result.get('student'), data.get('results'))
+        data = {
+            'count': data.get('count'),
+            'results': list(target_results)
+        }
+        return result_util.success(data)
 
     def post(self, request):
         """

@@ -41,20 +41,15 @@ class TestActivityStudentList(ActivityStudentBaseTest):
         :author: gexuewen
         :date: 2020/01/02
         """
-        res = self.client.get('/activity/student',
-                              data={
-                                  'page': 3,
-                                  'page_size': 2,
-                                  'activity_id': self.activity_to_add.id
-                              })
-        result = res.json()
+        result = self.client.get('/activity/student',
+                                 data={
+                                     'page': 3,
+                                     'page_size': 2,
+                                     'activity_id': self.activity_to_add.id
+                                 }).json()
         self.assertEqual(result.get('code'), result_util.SUCCESS)
         data = result.get('data')
-
-        self.assertIsNotNone(data)
         results = data.get('results')
-        self.assertEqual(len(results), 2)
-        activity_student = results[1]
         student = self.students[5]
-        result_student = activity_student.get('student')
+        result_student = results[1]
         self.assertEqual(result_student.get('name'), student.name)
