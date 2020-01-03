@@ -41,6 +41,12 @@ class TestActivityStudentJoin(ActivityStudentBaseTest):
         self.assertEqual(result.get('code'), ALREADY_JOIN)
 
     def send(self):
+        """
+        向参加活动接口发起请求
+
+        :author: gexuewen
+        :date: 2020/01/03
+        """
         return self.client.post('/activity/student',
                                 data={
                                     'activity_id': self.activity_to_join.id,
