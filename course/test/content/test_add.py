@@ -11,7 +11,7 @@ from course.test.generate.course import get_course
 from util import result_util
 
 
-class TestContent(TestCase):
+class TestAddContent(TestCase):
     """
     条目测试
 

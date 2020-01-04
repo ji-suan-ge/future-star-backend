@@ -23,7 +23,7 @@ def get_resource_data():
                      'type': random.randint(0, 2),
                      'url': 'url_' + get_random_string(),
                      'word': 'word_' + get_random_string(),
-                     'state': random.randint(0, 1),
+                     'state': random.randint(0, 1)
                      }
     return resource_data
 
