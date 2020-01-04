@@ -57,5 +57,5 @@ class ResourceDetailViewSet(mixins.UpdateModelMixin,
         :author: lishanZheng
         :date: 2020/01/04
         """
-        res = self.partial_update(request, primary_key)
-        return result_util.success(res.data)
+        result = self.partial_update(request, primary_key)
+        return result_util.success(result.data)
