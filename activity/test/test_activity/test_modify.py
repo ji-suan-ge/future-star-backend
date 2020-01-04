@@ -36,18 +36,17 @@ class TestActivityAdd(TestCase):
         self.activity_data['price'] = 300
         res = self.client.put('/activity/activity/' + str(self.activity.id),
                               data=self.activity_data,
-                              content_type="application/x-www-form-urlencoded")
+                              content_type="application/json")
         res = res.json()
         self.assertEqual(res.get('code'), result_util.SUCCESS)
 
         activity = res.get('data')
         self.assertIsNotNone(activity)
+        self.assertEqual(activity.get('name'),
+                         self.activity_data.get('name'))
 
-        self.assertNotEqual(activity.get('name'),
-                            self.activity_data.get('name'))
-
-        self.assertNotEqual(activity.get('price'),
-                            self.activity_data.get('price'))
+        self.assertEqual(activity.get('price'),
+                         self.activity_data.get('price'))
 
         self.assertEqual(activity.get('enroll_start_time'),
                          self.activity_data.get('enroll_start_time'))
