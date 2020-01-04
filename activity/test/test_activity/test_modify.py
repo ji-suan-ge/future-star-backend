@@ -11,7 +11,7 @@ from activity.models import Activity
 from activity.test.generate.activity import get_activity_data
 
 
-class TestActivityAdd(TestCase):
+class TestActivityModify(TestCase):
     """
     修改活动测试
 
@@ -25,7 +25,7 @@ class TestActivityAdd(TestCase):
         activity.save()
         self.activity = activity
 
-    def test_add_activity(self):
+    def test_modify_activity(self):
         """
         修改活动
 
