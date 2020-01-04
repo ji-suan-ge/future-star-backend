@@ -6,8 +6,6 @@ teacher
 """
 from django.test import TestCase
 
-from course.test.generate.content import get_content
-from course.test.generate.resource import get_resource_data
 from course.test.generate.teacher import get_teacher_data
 from util import result_util
 
@@ -17,7 +15,7 @@ class TestTeacher(TestCase):
     添加老师测试
 
     :author: lishanZheng
-    :date: 2020/01/03
+    :date: 2020/01/04
     """
 
     def test_add_teacher(self):
