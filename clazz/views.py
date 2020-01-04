@@ -8,9 +8,12 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 from clazz.constant.clazz_state import UNOPENED
+from clazz.models import Clazz
 from clazz.serializers import ClazzSerializer
 from semester.models import Semester
 from util import result_util
+from util.dictionary import remove_key
+from util.pagination import CustomPageNumberPagination
 
 
 class ClazzViewSet(ListModelMixin,
@@ -23,10 +26,31 @@ class ClazzViewSet(ListModelMixin,
     :date: 2020/01/04
     """
     serializer_class = ClazzSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        semester_id = self.request.query_params.get('semester_id')
+        return Clazz.objects.filter(semester_id=semester_id)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.semester = None
+
+    def get(self, request):
+        """
+        get clazz
+
+        :author: gexuewen
+        :date: 2020/01/04
+        """
+        res = self.list(request)
+        data = res.data
+        target_results = map(lambda result: remove_key(result, 'semester'), data.get('results'))
+        result_data = {
+            'count': data.get('count'),
+            'results': list(target_results)
+        }
+        return result_util.success(result_data)
 
     def post(self, request):
         """
