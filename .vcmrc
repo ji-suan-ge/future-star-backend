@@ -1,0 +1,15 @@
+{
+  "types": ["Feat", "Fix", "Docs", "Style", "Refactor", "Perf", "Test", "WIP", "Chore", "Revert"],
+  "scope": {
+    "required": true,
+    "allowed": ["repo", "activity", "administrator", "clazz", "course", "semester", "student", "util", "config"],
+    "validate": true,
+    "multiple": false
+  },
+  "warnOnFail": false,
+  "maxSubjectLength": 100,
+  "subjectPattern": ".+",
+  "subjectPatternErrorMsg": "subject does not match subject pattern!",
+  "helpMessage": "",
+  "autoFix": false
+}
