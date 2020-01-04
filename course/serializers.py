@@ -6,7 +6,7 @@ activity serializers
 """
 from rest_framework.serializers import ModelSerializer
 
-from course.models import Resource
+from course.models import Resource, Teacher
 
 
 class ResourceSerializer(ModelSerializer):
@@ -19,4 +19,17 @@ class ResourceSerializer(ModelSerializer):
 
     class Meta:
         model = Resource
+        fields = '__all__'
+
+
+class TeacherSerializer(ModelSerializer):
+    """
+    teacher serializer
+
+    :author: lishanZheng
+    :date: 2020/01/04
+    """
+
+    class Meta:
+        model = Teacher
         fields = '__all__'

@@ -1,5 +1,5 @@
 """
-courses
+resource
 
 :author: lishanZheng
 :date: 2019/12/28
