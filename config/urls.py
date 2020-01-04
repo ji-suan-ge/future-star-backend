@@ -16,17 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-ACTIVITY = 'activity/'
-ADMINISTRATOR = 'administrator/'
-STUDENT = 'student/'
-SEMESTER = 'semester/'
-COURSE = 'course/'
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(ACTIVITY, include('activity.urls')),
-    path(ADMINISTRATOR, include('administrator.urls')),
-    path(STUDENT, include('student.urls')),
-    path(SEMESTER, include('semester.urls')),
-    path(COURSE, include('course.urls'))
+    path('activity/', include('activity.urls')),
+    path('administrator/', include('administrator.urls')),
+    path('student/', include('student.urls')),
+    path('semester/', include('semester.urls')),
+    path('course/', include('course.urls')),
+    path('clazz/', include('clazz.urls'))
 ]
