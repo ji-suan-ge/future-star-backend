@@ -10,4 +10,5 @@ from clazz import views
 
 urlpatterns = [
     path('clazz', views.ClazzViewSet.as_view()),
+    path('clazz/<int:primary_key>', views.ClazzDetailViewSet.as_view())
 ]

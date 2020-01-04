@@ -4,8 +4,7 @@ clazz views
 :author: gexuewen
 :date: 2020/01/04
 """
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework import mixins, generics
 
 from clazz.constant.clazz_state import UNOPENED
 from clazz.models import Clazz
@@ -16,9 +15,9 @@ from util.dictionary import remove_key
 from util.pagination import CustomPageNumberPagination
 
 
-class ClazzViewSet(ListModelMixin,
-                   CreateModelMixin,
-                   GenericAPIView):
+class ClazzViewSet(mixins.ListModelMixin,
+                   mixins.CreateModelMixin,
+                   generics.GenericAPIView):
     """
     clazz view set
 
@@ -72,3 +71,33 @@ class ClazzViewSet(ListModelMixin,
         context = super(ClazzViewSet, self).get_serializer_context()
         context['semester'] = self.semester
         return context
+
+
+class ClazzDetailViewSet(mixins.UpdateModelMixin,
+                         generics.GenericAPIView):
+    """
+    clazz detail view set
+
+    :author: gexuewen
+    :date: 2020/01/04
+    """
+    queryset = Clazz.objects.filter()
+    serializer_class = ClazzSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update clazz
+
+        :author: gexuewen
+        :date: 2020/01/04
+        """
+        semester_id = request.data.get('semester_id')
+        semester = Semester.objects.filter(id=semester_id).first()
+        if semester is not None:
+            clazz = self.get_object()
+            clazz.semester = semester
+            clazz.save()
+        res = self.partial_update(request, primary_key)
+        return result_util.success(res.data)
