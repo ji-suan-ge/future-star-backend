@@ -66,15 +66,15 @@ class ContentDetailViewSet(mixins.UpdateModelMixin,
     lookup_field = 'id'
     lookup_url_kwarg = 'primary_key'
 
-    # def put(self, request, primary_key):
-    #     """
-    #     update activity
-    #
-    #     :author: gexuewen
-    #     :date: 2020/01/02
-    #     """
-    #     res = self.partial_update(request, primary_key)
-    #     return result_util.success(res.data)
+    def put(self, request, primary_key):
+        """
+        update content
+
+        :author: lishanZheng
+        :date: 2020/01/04
+        """
+        res = self.partial_update(request, primary_key)
+        return result_util.success(res.data)
 
     def delete(self, request, primary_key):
         """
