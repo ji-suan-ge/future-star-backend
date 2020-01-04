@@ -50,3 +50,40 @@ class ContentViewSet(mixins.ListModelMixin,
         """
         page = self.list(request).data
         return result_util.success(page)
+
+
+class ContentDetailViewSet(mixins.UpdateModelMixin,
+                           mixins.DestroyModelMixin,
+                           generics.GenericAPIView):
+    """
+    content detail view set
+
+    :author: lishanZheng
+    :date: 2020/01/04
+    """
+    queryset = Content.objects.all()
+    serializer_class = ContentSerializer
+    lookup_url_kwarg = 'primary_key'
+    lookup_field = 'id'
+
+    def put(self, request, primary_key):
+        """
+        update content
+
+        :author: lishanZheng
+        :date: 2020/01/04
+        """
+        res = self.partial_update(request, primary_key)
+        return result_util.success(res.data)
+
+    def delete(self, request, primary_key):
+        """
+        delete content
+
+        :author: lishanZheng
+        :date: 2020/01/04
+        """
+        over = self.destroy(request, primary_key)
+        if over is None:
+            pass
+        return result_util.success_empty()

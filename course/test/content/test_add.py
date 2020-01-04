@@ -13,7 +13,7 @@ from util import result_util
 
 class TestAddContent(TestCase):
     """
-    条目测试
+    添加条目测试
 
     :author: lishanZheng
     :date: 2020/01/04
@@ -21,7 +21,7 @@ class TestAddContent(TestCase):
 
     def test_add_content(self):
         """
-        添加目录
+        添加条目
 
         :author: lishanZheng
         :date: 2020/01/04
