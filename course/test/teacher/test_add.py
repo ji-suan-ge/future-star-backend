@@ -10,7 +10,7 @@ from course.test.generate.teacher import get_teacher_data
 from util import result_util
 
 
-class TestTeacher(TestCase):
+class TestAddTeacher(TestCase):
     """
     添加老师测试
 

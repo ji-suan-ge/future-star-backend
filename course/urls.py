@@ -10,6 +10,8 @@ from course.views import resource, teacher, content
 
 urlpatterns = [
     path('resource', resource.ResourceViewSet.as_view()),
+    path('resource/<int:primary_key>', resource.ResourceDetailViewSet.as_view()),
     path('teacher', teacher.TeacherViewSet.as_view()),
     path('content', content.ContentViewSet.as_view())
+
 ]

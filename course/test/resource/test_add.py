@@ -11,7 +11,7 @@ from course.test.generate.resource import get_resource_data
 from util import result_util
 
 
-class TestResource(TestCase):
+class TestAddResource(TestCase):
     """
     添加课程资源测试
 
