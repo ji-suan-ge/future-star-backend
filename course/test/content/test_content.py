@@ -13,7 +13,7 @@ from util import result_util
 
 class TestContent(TestCase):
     """
-    添加目录测试
+    条目测试
 
     :author: lishanZheng
     :date: 2020/01/04
