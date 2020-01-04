@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "checking your code style, please wait..."
+pylint activity administrator clazz course semester student util
