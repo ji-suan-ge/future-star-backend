@@ -29,7 +29,7 @@ class ClazzViewSet(ListModelMixin,
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        semester_id = self.request.data.get('semester_id')
+        semester_id = self.request.query_params.get('semester_id')
         return Clazz.objects.filter(semester_id=semester_id)
 
     def __init__(self, **kwargs):
