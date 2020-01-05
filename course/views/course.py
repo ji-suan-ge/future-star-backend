@@ -21,13 +21,22 @@ class CourseViewSet(mixins.ListModelMixin,
     :author: lishanZheng
     :date: 2020/01/04
     """
-    queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CustomPageNumberPagination
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.teacher = None
+
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        clazz_id = self.request.GET.get('clazz_id')
+        state = self.request.GET.get('state')
+        if clazz_id is not None:
+            queryset = Course.objects.filter(clazz_id=clazz_id)
+            if state is not None:
+                queryset = Course.objects.filter(state=state, clazz_id=clazz_id)
+        return queryset
 
     def post(self, request):
         """
@@ -42,6 +51,16 @@ class CourseViewSet(mixins.ListModelMixin,
         if course.is_valid():
             course.save()
         return result_util.success(course.data)
+
+    def get(self, request):
+        """
+        get course list
+
+        :author: lishanZheng
+        :date: 2020/01/05
+        """
+        result_course_list = self.list(self).data
+        return result_util.success(result_course_list)
 
     def get_serializer_context(self):
         context = super(CourseViewSet, self).get_serializer_context()
