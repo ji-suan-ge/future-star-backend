@@ -1,5 +1,5 @@
 """
-resource
+add resource test
 
 :author: lishanZheng
 :date: 2019/12/28
