@@ -7,6 +7,7 @@ add course test
 from django.test import TestCase
 from course.test.generate.clazz import get_clazz
 from course.test.generate.course import get_course_data
+from course.test.generate.teacher import get_teacher_data
 from util.result_util import SUCCESS
 
 
@@ -27,8 +28,10 @@ class TestAddCourse(TestCase):
         """
         clazz = get_clazz()
         course_data = get_course_data()
+        teacher_data = get_teacher_data()
+        course_data['teacher'] = teacher_data
         course_data['clazz'] = clazz.id
-        res = self.client.post('/course/course', data=course_data)
+        res = self.client.post('/course/course', data=course_data, content_type='application/json')
         result = res.json()
         self.assertEqual(result.get('code'), SUCCESS)
         course = result.get('data')

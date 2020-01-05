@@ -8,7 +8,6 @@ from rest_framework import mixins, generics
 
 from course.models import Course, Teacher
 from course.serializers import CourseSerializer
-from course.test.generate.teacher import get_default_teacher_data
 from util import result_util
 from util.pagination import CustomPageNumberPagination
 
@@ -26,6 +25,10 @@ class CourseViewSet(mixins.ListModelMixin,
     serializer_class = CourseSerializer
     pagination_class = CustomPageNumberPagination
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.teacher = None
+
     def post(self, request):
         """
         add course
@@ -33,13 +36,17 @@ class CourseViewSet(mixins.ListModelMixin,
         :author: lishanZheng
         :date: 2020/01/04
         """
-        teacher_data = get_default_teacher_data()
-        teacher = Teacher(**teacher_data)
-        teacher.save()
-        course = CourseSerializer(data=request.data, context={'teacher': teacher})
+        teacher_data = request.data.get('teacher')
+        self.teacher = Teacher.objects.create(**teacher_data)
+        course = self.get_serializer(data=request.data)
         if course.is_valid():
             course.save()
         return result_util.success(course.data)
+
+    def get_serializer_context(self):
+        context = super(CourseViewSet, self).get_serializer_context()
+        context['teacher'] = self.teacher
+        return context
 
 
 class CourseDetailViewSet(mixins.UpdateModelMixin,
