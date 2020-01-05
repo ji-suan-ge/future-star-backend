@@ -15,4 +15,5 @@ urlpatterns = [
     path('content', content.ContentViewSet.as_view()),
     path('content/<int:primary_key>', content.ContentDetailViewSet.as_view()),
     path('course', course.CourseViewSet.as_view()),
+    path('course/<int:primary_key>', course.CourseDetailViewSet.as_view()),
 ]

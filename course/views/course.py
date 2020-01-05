@@ -40,3 +40,28 @@ class CourseViewSet(mixins.ListModelMixin,
         if course.is_valid():
             course.save()
         return result_util.success(course.data)
+
+
+class CourseDetailViewSet(mixins.UpdateModelMixin,
+                          mixins.DestroyModelMixin,
+                          generics.GenericAPIView):
+    """
+    course detail view set
+
+    :author: lishanZheng
+    :date: 2020/01/05
+    """
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update course
+
+        :author: lishanZheng
+        :date: 2020/01/05
+        """
+        result_course = self.partial_update(request, primary_key)
+        return result_util.success(result_course.data)
