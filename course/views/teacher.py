@@ -1,5 +1,5 @@
 """
-resource
+teacher
 
 :author: lishanZheng
 :date: 2020/01/04
