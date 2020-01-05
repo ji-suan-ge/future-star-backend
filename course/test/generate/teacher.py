@@ -35,3 +35,19 @@ def get_teacher():
     teacher = Teacher(**get_teacher_data())
     teacher.save()
     return teacher
+
+
+def get_default_teacher_data():
+    """
+    生成一个默认老师数据
+
+    :author: lishanZheng
+    :date: 2020/01/03
+    """
+    teacher_data = {'name': '',
+                    'avatar': '',
+                    'title': '还没有头衔，快去添加吧',
+                    'introduction': '还没有自我介绍，快去添加吧',
+                    'contact_way': '还没有联系方式，快去添加吧',
+                    }
+    return teacher_data
