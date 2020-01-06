@@ -34,18 +34,18 @@ class StudentList(mixins.ListModelMixin,
         semester_id = self.request.GET.get('semester_id')
         clazz_id = self.request.GET.get('clazz_id')
         name = self.request.GET.get('name')
-        if semester_id is not None:
-            if clazz_id is not None:
-                student_set = ClazzStudent.objects.filter(clazz_id=clazz_id)
-            else:
-                clazz_set = Clazz.objects.filter(semester_id=semester_id)
-                clazz_id_list = clazz_set_to_list(clazz_set)
-                student_set = ClazzStudent.objects.filter(clazz_id__in=clazz_id_list)
-            student_list = student_set_to_list(student_set)
-            queryset = Student.objects.filter(id__in=student_list,
-                                              state__in=[NOT_GRADUATE, VALID])
         if name is not None:
-            queryset = Student.objects.filter(name__contains=name)
+            queryset = queryset.filter(name__contains=name)
+        if clazz_id is not None:
+            student_set = ClazzStudent.objects.filter(clazz_id=clazz_id)
+            student_list = list(student_set.values_list('student_id', flat=True))
+            queryset = queryset.filter(id__in=student_list)
+        if semester_id is not None:
+            clazz_set = Clazz.objects.filter(semester_id=semester_id)
+            clazz_id_list = list(clazz_set.values_list('id', flat=True))
+            student_set = ClazzStudent.objects.filter(clazz_id__in=clazz_id_list)
+            student_list = list(student_set.values_list('student_id', flat=True))
+            queryset = queryset.filter(id__in=student_list)
         return queryset
 
     def get(self, request):
@@ -111,31 +111,3 @@ class StudentDetailViewSet(UpdateModelMixin,
         if student_serializer.is_valid():
             student_serializer.save()
         return result_util.success(student_serializer.data)
-
-
-def clazz_set_to_list(clazz_set):
-    """
-    从班级集合中得到班级id的list
-
-    :author: lishanZheng
-    :date: 2020/01/01
-    """
-    id_list = []
-    times = range(len(clazz_set))
-    for i in times:
-        id_list.append(clazz_set[i].id)
-    return id_list
-
-
-def student_set_to_list(query):
-    """
-    从学生集合中得到班级id的list
-
-    :author: lishanZheng
-    :date: 2020/01/01
-    """
-    id_list = []
-    times = range(len(query))
-    for i in times:
-        id_list.append(query[i].student_id)
-    return id_list

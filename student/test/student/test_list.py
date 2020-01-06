@@ -97,7 +97,7 @@ class TestStudentListBy(TestCase):
         res = self.client.get('/student/student',
                               data={
                                   'page_size': 1,
-                                  'page': 2,
+                                  'page': 1,
                                   'clazz_id': self.clazz_student.clazz_id
 
                               })
