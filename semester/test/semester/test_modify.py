@@ -1,5 +1,5 @@
 """
-tests
+modify semester test
 
 :author: lishanZheng
 :date: 2020/01/02
@@ -20,8 +20,7 @@ class TestModifySemester(TestCase):
 
     def setUp(self):
         self.semester_data = get_semester_data()
-        semester_one = Semester(**self.semester_data)
-        semester_one.save()
+        semester_one = Semester.objects.create(**self.semester_data)
         self.semester = semester_one
 
     def test_modify_semester(self):

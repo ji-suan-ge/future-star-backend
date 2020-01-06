@@ -72,16 +72,3 @@ class SemesterDetailViewSet(mixins.UpdateModelMixin,
         key = primary_key
         res = self.partial_update(request, key)
         return result_util.success(res.data)
-
-    # def delete(self, request, primary_key):
-    #     """
-    #     cancel activity
-    #
-    #     :author: gexuewen
-    #     :date: 2020/01/02
-    #     """
-    #     self.destroy(request, primary_key)
-    #     return result_util.success_empty()
-    #
-    # def perform_destroy(self, instance):
-    #     instance.state = CLOSED_ACT

@@ -7,6 +7,9 @@ clazz generator
 from django.utils.crypto import get_random_string
 
 from clazz.constant.clazz_state import UNOPENED
+from clazz.models import Clazz
+from semester.models import Semester
+from semester.test.generate.semester import get_semester_data
 
 
 def get_clazz_data():
@@ -26,3 +29,19 @@ def get_clazz_data():
         'state': UNOPENED,
     }
     return clazz_data
+
+
+def get_clazz():
+    """
+    生成一个课程
+
+    :author: lishanZheng
+    :date: 2020/01/03
+    """
+    semester_data = get_semester_data()
+    semester = Semester(**semester_data)
+    semester.save()
+    clazz_data = get_clazz_data()
+    clazz = Clazz(**clazz_data, semester=semester)
+    clazz.save()
+    return clazz

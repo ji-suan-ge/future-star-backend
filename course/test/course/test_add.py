@@ -5,7 +5,7 @@ add course test
 :date: 2020/01/05
 """
 from django.test import TestCase
-from course.test.generate.clazz import get_clazz
+from clazz.test.generate.clazz import get_clazz
 from course.test.generate.course import get_course_data
 from course.test.generate.teacher import get_teacher_data
 from util.result_util import SUCCESS

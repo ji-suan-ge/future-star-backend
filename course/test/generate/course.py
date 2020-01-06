@@ -8,8 +8,8 @@ import random
 
 from django.utils.crypto import get_random_string
 
+from clazz.test.generate.clazz import get_clazz
 from course.models import Course
-from course.test.generate.clazz import get_clazz
 from course.test.generate.teacher import get_teacher
 
 
