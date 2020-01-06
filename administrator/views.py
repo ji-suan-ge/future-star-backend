@@ -100,13 +100,12 @@ class AdministratorDetailViewSet(mixins.UpdateModelMixin,
         :date: 2020/01/06
         """
         admin = self.get_object()
-        admin.id = primary_key
         privilege_id = admin.privilege_id
         privilege = Privilege.objects.filter(id=privilege_id)
-        data = request.data
+        data = request.data.get('privilege')
         privilege.update(**data)
-        admin = AdministratorSerializer(admin)
-        return result_util.success(admin.data)
+        result = self.partial_update(request, primary_key)
+        return result_util.success(result.data)
 
     def delete(self, request, primary_key):
         """
