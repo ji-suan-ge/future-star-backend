@@ -1,5 +1,5 @@
 """
-semester list test
+get semester list test
 
 :author: lishanZheng
 :date: 2020/01/02
