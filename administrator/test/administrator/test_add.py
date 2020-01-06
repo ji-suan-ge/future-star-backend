@@ -1,5 +1,5 @@
 """
-delete administrator test
+add administrator test
 
 :author: lishanZheng
 :date: 2020/01/06

@@ -11,7 +11,7 @@ from administrator.test.generate.privilege import get_privilege_data
 from util.result_util import SUCCESS
 
 
-class TestModifyPrivilege(TestCase):
+class TestModifyAdministrator(TestCase):
     """
     修改管理员信息测试
 
@@ -21,7 +21,7 @@ class TestModifyPrivilege(TestCase):
 
     def test_modify_administrator(self):
         """
-        修改管理员权限
+        修改管理员信息包括权限
 
         :author: lishanZheng
         :date: 2020/01/06
