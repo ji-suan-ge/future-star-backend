@@ -114,10 +114,9 @@ class StudentDetailViewSet(UpdateModelMixin,
 
 
 def login(request):
-        """
-        student login
+    """
+    student login
 
-        :author: gexuewen
-        :date: 2020/01/06
-        """
-    pass
+    :author: gexuewen
+    :date: 2020/01/06
+    """
