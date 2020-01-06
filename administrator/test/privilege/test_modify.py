@@ -18,7 +18,7 @@ class TestModifyPrivilege(TestCase):
     :date: 2020/01/06
     """
 
-    def test_modify_pri(self):
+    def test_modify_privilege(self):
         """
         修改管理员权限
 
@@ -26,7 +26,9 @@ class TestModifyPrivilege(TestCase):
         :date: 2020/01/06
         """
         admin = get_administrator()
-        res = self.client.post('/administrator/modify', data={
-            'privilege_id': admin.privilege_id, 'semester': 1, 'activity': 1,
-            'enrollment': 1, 'student': 1})
+        res = self.client.put('/administrator/administrator/' + str(admin.id),
+                              data=({
+                                  'semester': 1, 'activity': 1, 'enrollment': 1, 'student': 1
+                              }),
+                              content_type='application/json')
         self.assertEqual(res.json()['code'], SUCCESS)

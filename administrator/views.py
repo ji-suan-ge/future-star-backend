@@ -1,5 +1,5 @@
 """
-views
+administrator views
 
 :author: gexuewen
 :date: 2019/12/28
@@ -46,7 +46,7 @@ class AdministratorViewSet(mixins.ListModelMixin,
 
     def post(self, request):
         """
-        add new admin
+        add administrator
 
         :author: lishanZheng
         :date: 2019/12/31
@@ -76,6 +76,37 @@ class AdministratorViewSet(mixins.ListModelMixin,
         context = super(AdministratorViewSet, self).get_serializer_context()
         context['privilege'] = self.privilege
         return context
+
+
+class AdministratorDetailViewSet(mixins.UpdateModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 generics.GenericAPIView):
+    """
+    administrator detail view set
+
+    :author: lishanZheng
+    :date: 2020/01/06
+    """
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update administrator
+
+        :author: lishanZheng
+        :date: 2020/01/06
+        """
+        admin = self.get_object()
+        admin.id = primary_key
+        privilege_id = admin.privilege_id
+        privilege = Privilege.objects.filter(id=privilege_id)
+        data = request.data
+        privilege.update(**data)
+        admin = AdministratorSerializer(admin)
+        return result_util.success(admin.data)
 
 
 @csrf_exempt
