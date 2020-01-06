@@ -1,67 +1,50 @@
 """
-student list tests
+student list test
 
 :author: lishanZheng
 :date: 2020/01/03
 """
 from django.test import TestCase
 from clazz.models import Clazz, ClazzStudent
-from semester.models import Semester
-from semester.test.generate.semester import get_semester_data
-from student.generate.application import get_application_data
-from student.generate.company import get_company_data
-from student.generate.evaluation import get_evaluation_data
-from student.generate.student import get_student_data
-from student.models import Company, Student, Evaluation, ApplicationInformation
+from clazz.test.generate.clazz import get_clazz_data
+from semester.test.generate.semester import get_semester
+from student.constant.state import VALID
+from student.test.generate.application import get_application_information
+from student.test.generate.evaluation import get_evaluation
+from student.test.generate.student import get_student
 from util import result_util
 
 
-class TestStudentList(TestCase):
+class TestStudentListBy(TestCase):
     """
-    获取校友列表单元测试
+    获取校友列表测试
 
     :author: lishanZheng
-    :date: 2020/01/03
+    :date: 2020/01/06
     """
-    student_data = get_student_data()
-    student = ''
-    company_data = get_company_data()
-    evaluation_data = get_evaluation_data()
-    semester_data = get_semester_data()
-    semester = ''
-    application_data = get_application_data()
-    clazz_data = {
-        'name': '班级名字',
-        'introduction': '班级介绍',
-        'start_time': '2020-01-02',
-        'end_time': '2020-01-03',
-        'people_number_limit': 1000,
-        'current_people_number': 100,
-        'state': 2,
-    }
-    clazz_student = ''
 
     def setUp(self):
-        application = ApplicationInformation(**self.application_data)
-        application.save()
-        company = Company(**self.company_data)
-        company.save()
-        student = Student(company_id=company.id, **self.student_data)
-        student.save()
-        self.student = student
-        evaluation = Evaluation(**self.evaluation_data)
-        evaluation.save()
-        semester = Semester(**self.semester_data)
-        semester.save()
+        semester = get_semester()
+        evaluation = get_evaluation()
+        student_one = get_student()
+        application = get_application_information()
+        clazz_data = get_clazz_data()
+        clazz = Clazz.objects.create(**clazz_data, semester_id=semester.id)
+        student_two = get_student()
+        ClazzStudent.objects.create(state=VALID,
+                                    student_id=student_one.id,
+                                    apply_id=application.id,
+                                    clazz_id=clazz.id,
+                                    evaluation_id=evaluation.id)
+        semester = get_semester()
+        clazz = Clazz.objects.create(**clazz_data, semester_id=semester.id)
+        clazz_student = ClazzStudent.objects.create(state=VALID,
+                                                    apply_id=application.id,
+                                                    clazz_id=clazz.id,
+                                                    evaluation_id=evaluation.id,
+                                                    student_id=student_two.id)
+        self.student = student_two
         self.semester = semester
-        clazz = Clazz(**self.clazz_data, semester_id=semester.id)
-        clazz.save()
-        clazz_student = ClazzStudent(state=2,
-                                     apply_id=application.id,
-                                     clazz_id=clazz.id,
-                                     evaluation_id=evaluation.id,
-                                     student_id=student.id)
-        clazz_student.save()
         self.clazz_student = clazz_student
 
     def test_student_list(self):
@@ -69,29 +52,30 @@ class TestStudentList(TestCase):
         分页获取校友信息
 
         :author: lishanZheng
-        :date: 2020/01/03
+        :date: 2020/01/06
         """
-        company = Company(**self.company_data)
-        company.save()
-        student = Student(company_id=company.id, **self.student_data)
-        student.save()
         res = self.client.get('/student/student',
                               data={
                                   'page_size': 1,
                                   'page': 2
                               })
         result = res.json()
-        results = result.get('data')
+        data_student_list = result.get('data')
+        results_student_list = data_student_list.get('results')
         self.assertEqual(result['code'], result_util.SUCCESS)
-        self.assertEqual(results.get('results')[0].get('name'), student.name)
+        student = results_student_list[0]
+        self.assertEqual(student.get('name'), self.student.name)
+        self.assertEqual(student.get('email'), self.student.email)
+        self.assertEqual(student.get('wx'), self.student.wx)
 
     def test_student_list_by_semester(self):
         """
         按学期获取校友信息
 
         :author: lishanZheng
-        :date: 2020/01/03
+        :date: 2020/01/06
         """
+
         res = self.client.get('/student/student',
                               data={
                                   'page_size': 1,
@@ -105,16 +89,17 @@ class TestStudentList(TestCase):
 
     def test_student_list_by_clazz(self):
         """
-        按课程获取校友信息
+        按班级获取校友信息
 
         :author: lishanZheng
-        :date: 2020/01/03
+        :date: 2020/01/06
         """
         res = self.client.get('/student/student',
                               data={
                                   'page_size': 1,
                                   'page': 1,
-                                  'clazz_id': self.clazz_student.clazz_id,
+                                  'clazz_id': self.clazz_student.clazz_id
+
                               })
         result = res.json()
         results = result.get('data')
@@ -126,7 +111,7 @@ class TestStudentList(TestCase):
         按姓名获取校友信息
 
         :author: lishanZheng
-        :date: 2020/01/03
+        :date: 2020/01/06
         """
         res = self.client.get('/student/student',
                               data={
