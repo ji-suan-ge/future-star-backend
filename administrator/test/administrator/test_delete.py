@@ -34,5 +34,5 @@ class TestDeleteAdministrator(TestCase):
         :author: lishanZheng
         :date: 2020/01/06
         """
-        res = self.client.post('/administrator/delete', data={'id': self.admin.id})
+        res = self.client.delete('/administrator/administrator/' + str(self.admin.id))
         self.assertEqual(res.json()['code'], SUCCESS)

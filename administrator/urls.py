@@ -13,6 +13,4 @@ urlpatterns = [
     path('logout', views.logout),
     path('administrator', views.AdministratorViewSet.as_view()),
     path('administrator/<int:primary_key>', views.AdministratorDetailViewSet.as_view()),
-    path('delete', views.delete),
-    path('modify', views.modify)
 ]

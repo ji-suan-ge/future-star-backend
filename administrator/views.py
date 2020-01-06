@@ -108,41 +108,20 @@ class AdministratorDetailViewSet(mixins.UpdateModelMixin,
         admin = AdministratorSerializer(admin)
         return result_util.success(admin.data)
 
+    def delete(self, request, primary_key):
+        """
+        delete administrator
 
-@csrf_exempt
-def modify(request):
-    """
-    modify admin privilege
+        :author: lishanZheng
+        :date: 2020/01/06
+        """
+        self.destroy(request, primary_key)
+        return result_util.success_empty()
 
-    :author: lishanZheng
-    :date: 2020/01/01
-    """
-    privilege_id = request.POST['privilege_id']
-    privilege = Privilege.objects.get(id=privilege_id)
-    privilege.activity = request.POST['activity']
-    privilege.student = request.POST['student']
-    privilege.semester = request.POST['semester']
-    privilege.enrollment = request.POST['enrollment']
-    privilege.save()
-    return result_util.success_empty()
-
-
-@csrf_exempt
-def delete(request):
-    """
-    delete admin
-
-    :author: lishanZheng
-    :date: 2020/01/01
-    """
-    admin_id = request.POST.get('id')
-    try:
-        admin = Administrator.objects.get(id=admin_id)
-    except Administrator.DoesNotExist:
-        return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='该管理员不存在')
-    admin.state = 0
-    admin.save()
-    return result_util.success_empty()
+    def perform_destroy(self, instance):
+        instance.state = 0
+        instance.save()
+        return result_util.success_empty()
 
 
 @csrf_exempt
