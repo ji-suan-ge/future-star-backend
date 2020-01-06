@@ -5,6 +5,7 @@ serializers
 :date: 2020/01/01
 """
 from rest_framework import serializers
+
 from .models import Semester
 
 

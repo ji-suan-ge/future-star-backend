@@ -1,29 +1,29 @@
 image: python:3.7.6-stretch
 
 before_script:
-    - apt-get install default-libmysqlclient-dev
-    - pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
-    - pip install -r requirements.txt
+  - apt-get install default-libmysqlclient-dev
+  - pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
+  - pip install -r requirements.txt
 
 stages:
-    - lint
-    - test
+  - lint
+  - test
 
 lint-job:
-    stage: lint
-    script:
-        - pylint activity administrator clazz course semester student util
-    tags:
-        - future-1
+  stage: lint
+  script:
+    - pylint activity administrator clazz course semester student util
+  tags:
+    - future-1
 
 test-job:
-    stage: test
-    script:
-        - python manage.py test activity.test --settings=config.settings_test --keepdb
-        - python manage.py test administrator.test --settings=config.settings_test --keepdb
-        - python manage.py test clazz.test --settings=config.settings_test --keepdb
-        - python manage.py test course.test --settings=config.settings_test --keepdb
-        - python manage.py test semester.test --settings=config.settings_test --keepdb
-        - python manage.py test student.test --settings=config.settings_test --keepdb
-    tags:
-        - future-1
+  stage: test
+  script:
+    - python manage.py test activity.test --settings=config.settings_test --keepdb
+    - python manage.py test administrator.test --settings=config.settings_test --keepdb
+    - python manage.py test clazz.test --settings=config.settings_test --keepdb
+    - python manage.py test course.test --settings=config.settings_test --keepdb
+    - python manage.py test semester.test --settings=config.settings_test --keepdb
+    - python manage.py test student.test --settings=config.settings_test --keepdb
+  tags:
+    - future-1

@@ -112,5 +112,12 @@ class StudentDetailViewSet(UpdateModelMixin,
             student_serializer.save()
         return result_util.success(student_serializer.data)
 
+
 def login(request):
+        """
+        student login
+
+        :author: gexuewen
+        :date: 2020/01/06
+        """
     pass

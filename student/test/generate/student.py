@@ -5,8 +5,8 @@ student data generator
 :date: 2020/01/02
 """
 
-
 import random
+
 from django.utils.crypto import get_random_string
 
 from student.models import Student
