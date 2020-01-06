@@ -8,6 +8,8 @@ import random
 
 from django.utils.crypto import get_random_string
 
+from student.models import Company
+
 
 def get_company_data():
     """
@@ -36,3 +38,15 @@ def get_company_data():
         'value_of_assessment': 'value_' + get_random_string(),
     }
     return company_data
+
+
+def get_company():
+    """
+    生成一个公司
+
+    :author: lishanZheng
+    :date: 2020/01/06
+    """
+    company_data = get_company_data()
+    company = Company.objects.create(**company_data)
+    return company

@@ -9,6 +9,9 @@ student data generator
 import random
 from django.utils.crypto import get_random_string
 
+from student.models import Student
+from student.test.generate.company import get_company
+
 
 def get_student_data():
     """
@@ -37,3 +40,16 @@ def get_student_data():
         'state': random.randint(1, 2),
     }
     return student_data
+
+
+def get_student():
+    """
+    生成一个校友
+
+    :author: lishanZheng
+    :date: 2020/01/06
+    """
+    company = get_company()
+    student_data = get_student_data()
+    student = Student.objects.create(**student_data, company=company)
+    return student

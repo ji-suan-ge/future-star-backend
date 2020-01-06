@@ -8,6 +8,8 @@ import random
 
 from django.utils.crypto import get_random_string
 
+from student.models import ApplicationInformation
+
 
 def get_application_data():
     """
@@ -26,3 +28,15 @@ def get_application_data():
         'way': 'wx'
     }
     return application_data
+
+
+def get_application_information():
+    """
+    生成一个申请资料
+
+    :author: lishanZheng
+    :date: 2020/01/06
+    """
+    application_information_data = get_application_data()
+    application = ApplicationInformation.objects.create(**application_information_data)
+    return application
