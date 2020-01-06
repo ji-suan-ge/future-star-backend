@@ -1,5 +1,5 @@
 """
-views
+administrator views
 
 :author: gexuewen
 :date: 2019/12/28
@@ -11,15 +11,15 @@ from rest_framework import mixins
 from administrator import code
 from administrator.constant.state import VALID
 from administrator.models import Administrator, Privilege
-from administrator.serializers import AdministratorSerializer, PrivilegeSerializer
+from administrator.serializers import AdministratorSerializer
 from util import result_util
 from util.encrypt import compare
 from util.pagination import CustomPageNumberPagination
 
 
-class AdministratorList(mixins.ListModelMixin,
-                        mixins.CreateModelMixin,
-                        generics.GenericAPIView):
+class AdministratorViewSet(mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           generics.GenericAPIView):
     """
     administrator view set
 
@@ -29,6 +29,10 @@ class AdministratorList(mixins.ListModelMixin,
     queryset = Administrator.objects.filter(state=VALID)
     serializer_class = AdministratorSerializer
     pagination_class = CustomPageNumberPagination
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.privilege = None
 
     def get(self, request):
         """
@@ -42,12 +46,12 @@ class AdministratorList(mixins.ListModelMixin,
 
     def post(self, request):
         """
-        add new admin
+        add administrator
 
         :author: lishanZheng
-        :date: 2019/12/31
+        :date: 2020/01/06
         """
-        account = request.POST.get('account')
+        account = request.data.get('account')
         admin = Administrator.objects.filter(account=account)
         if admin.count() > 0:
             admin_old = Administrator.objects.get(account=account)
@@ -55,49 +59,62 @@ class AdministratorList(mixins.ListModelMixin,
                 admin_old.delete()
             else:
                 return result_util.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
-        privilege = PrivilegeSerializer(data=request.data)
-        if privilege.is_valid():
-            privilege = privilege.save()
-        admin = AdministratorSerializer(data=request.data, context={'privilege': privilege})
-        if admin.is_valid():
-            admin.save()
-        return result_util.success(data=admin.data)
+        privilege_data = request.data.get('privilege')
+        self.privilege = Privilege.objects.create(**privilege_data)
+        administrator = self.get_serializer(data=request.data)
+        if administrator.is_valid():
+            administrator.save()
+        return result_util.success(administrator.data)
+
+    def get_serializer_context(self):
+        context = super(AdministratorViewSet, self).get_serializer_context()
+        context['privilege'] = self.privilege
+        return context
 
 
-@csrf_exempt
-def modify(request):
+class AdministratorDetailViewSet(mixins.UpdateModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 generics.GenericAPIView):
     """
-    modify admin privilege
+    administrator detail view set
 
     :author: lishanZheng
-    :date: 2020/01/01
+    :date: 2020/01/06
     """
-    privilege_id = request.POST['privilege_id']
-    privilege = Privilege.objects.get(id=privilege_id)
-    privilege.activity = request.POST['activity']
-    privilege.student = request.POST['student']
-    privilege.semester = request.POST['semester']
-    privilege.enrollment = request.POST['enrollment']
-    privilege.save()
-    return result_util.success_empty()
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
 
+    def put(self, request, primary_key):
+        """
+        update administrator
 
-@csrf_exempt
-def delete(request):
-    """
-    delete admin
+        :author: lishanZheng
+        :date: 2020/01/06
+        """
+        admin = self.get_object()
+        privilege_id = admin.privilege_id
+        privilege = Privilege.objects.filter(id=privilege_id)
+        data = request.data.get('privilege')
+        privilege.update(**data)
+        result = self.partial_update(request, primary_key)
+        return result_util.success(result.data)
 
-    :author: lishanZheng
-    :date: 2020/01/01
-    """
-    admin_id = request.POST.get('id')
-    try:
-        admin = Administrator.objects.get(id=admin_id)
-    except Administrator.DoesNotExist:
-        return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='该管理员不存在')
-    admin.state = 0
-    admin.save()
-    return result_util.success_empty()
+    def delete(self, request, primary_key):
+        """
+        delete administrator
+
+        :author: lishanZheng
+        :date: 2020/01/06
+        """
+        self.destroy(request, primary_key)
+        return result_util.success_empty()
+
+    def perform_destroy(self, instance):
+        instance.state = 0
+        instance.save()
+        return result_util.success_empty()
 
 
 @csrf_exempt
