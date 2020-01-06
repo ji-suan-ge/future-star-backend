@@ -111,3 +111,6 @@ class StudentDetailViewSet(UpdateModelMixin,
         if student_serializer.is_valid():
             student_serializer.save()
         return result_util.success(student_serializer.data)
+
+def login(request):
+    pass
