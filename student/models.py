@@ -158,3 +158,16 @@ class Student(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     # 0 -不再是校友 ｜ 1 -还未毕业的校友 ｜2 -校友
     state = models.IntegerField(choices=STATE_CHOICE)
+
+
+class WechatStudent(models.Model):
+    """
+    wechat student model
+
+    :author: gexuewen
+    :date: 2020/01/07
+    """
+    session_id = models.CharField(max_length=40)
+    open_id = models.CharField(max_length=40)
+    session_key = models.CharField(max_length=40)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
