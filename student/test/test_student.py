@@ -6,8 +6,8 @@ student tests
 """
 from django.test import TestCase
 
-from student.generate.company import get_company_data
-from student.generate.student import get_student_data
+from student.test.generate.company import get_company_data
+from student.test.generate.student import get_student_data
 from student.models import Company, Student
 from util import result_util
 

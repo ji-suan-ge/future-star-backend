@@ -8,10 +8,10 @@ from django.test import TestCase
 from clazz.models import Clazz, ClazzStudent
 from semester.models import Semester
 from semester.test.generate.semester import get_semester_data
-from student.generate.application import get_application_data
-from student.generate.company import get_company_data
-from student.generate.evaluation import get_evaluation_data
-from student.generate.student import get_student_data
+from student.test.generate.application import get_application_data
+from student.test.generate.company import get_company_data
+from student.test.generate.evaluation import get_evaluation_data
+from student.test.generate.student import get_student_data
 from student.models import Company, Student, Evaluation, ApplicationInformation
 from util import result_util
 
