@@ -11,15 +11,15 @@ from rest_framework import mixins
 from administrator import code
 from administrator.constant.state import VALID
 from administrator.models import Administrator, Privilege
-from administrator.serializers import AdministratorSerializer, PrivilegeSerializer
+from administrator.serializers import AdministratorSerializer
 from util import result_util
 from util.encrypt import compare
 from util.pagination import CustomPageNumberPagination
 
 
-class AdministratorList(mixins.ListModelMixin,
-                        mixins.CreateModelMixin,
-                        generics.GenericAPIView):
+class AdministratorViewSet(mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           generics.GenericAPIView):
     """
     administrator view set
 
@@ -29,6 +29,10 @@ class AdministratorList(mixins.ListModelMixin,
     queryset = Administrator.objects.filter(state=VALID)
     serializer_class = AdministratorSerializer
     pagination_class = CustomPageNumberPagination
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.privilege = None
 
     def get(self, request):
         """
@@ -55,13 +59,23 @@ class AdministratorList(mixins.ListModelMixin,
                 admin_old.delete()
             else:
                 return result_util.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
-        privilege = PrivilegeSerializer(data=request.data)
-        if privilege.is_valid():
-            privilege = privilege.save()
-        admin = AdministratorSerializer(data=request.data, context={'privilege': privilege})
-        if admin.is_valid():
-            admin.save()
-        return result_util.success(data=admin.data)
+        post = request.POST
+        data = {
+            'enrollment': post.get('enrollment'),
+            'semester': post.get('semester'),
+            'activity': post.get('activity'),
+            'student': post.get('student')
+        }
+        self.privilege = Privilege.objects.create(**data)
+        administrator = self.get_serializer(data=request.data)
+        if administrator.is_valid():
+            administrator.save()
+        return result_util.success(administrator.data)
+
+    def get_serializer_context(self):
+        context = super(AdministratorViewSet, self).get_serializer_context()
+        context['privilege'] = self.privilege
+        return context
 
 
 @csrf_exempt

@@ -11,7 +11,7 @@ from administrator import views
 urlpatterns = [
     path('login', views.login),
     path('logout', views.logout),
-    path('administrator', views.AdministratorList.as_view()),
+    path('administrator', views.AdministratorViewSet.as_view()),
     path('delete', views.delete),
     path('modify', views.modify)
 ]
