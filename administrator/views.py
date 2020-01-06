@@ -49,9 +49,9 @@ class AdministratorViewSet(mixins.ListModelMixin,
         add administrator
 
         :author: lishanZheng
-        :date: 2019/12/31
+        :date: 2020/01/06
         """
-        account = request.POST.get('account')
+        account = request.data.get('account')
         admin = Administrator.objects.filter(account=account)
         if admin.count() > 0:
             admin_old = Administrator.objects.get(account=account)
@@ -59,14 +59,8 @@ class AdministratorViewSet(mixins.ListModelMixin,
                 admin_old.delete()
             else:
                 return result_util.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
-        post = request.POST
-        data = {
-            'enrollment': post.get('enrollment'),
-            'semester': post.get('semester'),
-            'activity': post.get('activity'),
-            'student': post.get('student')
-        }
-        self.privilege = Privilege.objects.create(**data)
+        privilege_data = request.data.get('privilege')
+        self.privilege = Privilege.objects.create(**privilege_data)
         administrator = self.get_serializer(data=request.data)
         if administrator.is_valid():
             administrator.save()

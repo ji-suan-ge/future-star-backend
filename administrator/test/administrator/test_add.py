@@ -30,8 +30,10 @@ class TestAddAdministrator(TestCase):
         """
         privilege_data = get_privilege_data()
         administrator_data = get_administrator_data()
-        res = self.client.post('/administrator/administrator', data={**privilege_data,
-                                                                     **administrator_data})
+        res = self.client.post('/administrator/administrator',
+                               data={'privilege': privilege_data,
+                                     **administrator_data},
+                               content_type='application/json')
         self.assertEqual(res.json()['code'], SUCCESS)
 
     def test_add_admin_exist(self):
@@ -46,6 +48,8 @@ class TestAddAdministrator(TestCase):
         administrator_data = get_administrator_data()
         Administrator.objects.create(**administrator_data,
                                      privilege=privilege)
-        res = self.client.post('/administrator/administrator', data={**privilege_data,
-                                                                     **administrator_data})
+        res = self.client.post('/administrator/administrator',
+                               data={'privilege': privilege_data,
+                                     **administrator_data},
+                               content_type='application/json')
         self.assertEqual(res.json()['code'], ADMIN_EXIST)
