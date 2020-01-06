@@ -20,8 +20,7 @@ def get_privilege_data():
         'enrollment': random.randint(1, 2),
         'semester': random.randint(1, 2),
         'activity': random.randint(1, 2),
-        'student': random.randint(1, 2),
-        'super': random.randint(1, 2)
+        'student': random.randint(1, 2)
     }
     return privilege_data
 
