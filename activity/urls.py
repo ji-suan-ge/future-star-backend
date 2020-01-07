@@ -6,9 +6,9 @@ activity urls
 """
 from django.urls import path
 
-from activity.views import activity as activity_view
-from activity.views import clazz as clazz_view
-from activity.views import student as student_view
+from activity.view import activity as activity_view
+from activity.view import clazz as clazz_view
+from activity.view import student as student_view
 
 urlpatterns = [
     path('activity', activity_view.ActivityViewSet.as_view()),

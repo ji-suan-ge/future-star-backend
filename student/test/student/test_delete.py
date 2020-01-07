@@ -6,7 +6,7 @@ delete student test
 """
 from django.test import TestCase
 
-from student.constant.state import INVALID
+from student.constant.student_state import INVALID
 from student.models import Student
 from student.test.generate.student import get_student
 from util import result_util

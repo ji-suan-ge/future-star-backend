@@ -17,7 +17,7 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 
 from clazz.models import Clazz, ClazzStudent
 from student.constant.code import INVALID_JS_CODE
-from student.constant.state import INVALID, NOT_GRADUATE, VALID
+from student.constant.student_state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
 from util import result_util

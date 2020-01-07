@@ -6,7 +6,7 @@ activity student list test
 """
 from activity.constant.activity_student_state import WAIT_FOR_PAY
 from activity.models import ActivityStudent
-from activity.test.test_activity_student.activity_student import ActivityStudentBaseTest
+from activity.test.activity_student.activity_student import ActivityStudentBaseTest
 from util import result_util
 
 
