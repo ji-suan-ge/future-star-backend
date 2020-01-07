@@ -50,7 +50,7 @@ class Course(models.Model):
     # 课程结束时间
     end_time = models.DateField()
     # 课程状态
-    state = models.IntegerField()
+    state = models.IntegerField(default=1)
 
 
 class Content(models.Model):  # 课程条目
