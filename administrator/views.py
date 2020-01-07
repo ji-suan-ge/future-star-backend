@@ -143,13 +143,11 @@ def login(request):
         if admin.state == 0:
             return result_util.error(error_code=code.ADMIN_NOT_EXIST, message='管理员不存在')
         if compare(password, correct_password):
-            if request.session.get('is_login') is None:
-                admin.password = ''
-                request.session['is_login'] = True
-                admin = AdministratorSerializer(admin).data
-                request.session['admin'] = admin
-                return result_util.success(admin)
-            return result_util.error(error_code=code.IS_LOGIN, message='已登录')
+            admin.password = ''
+            request.session['is_login'] = True
+            admin = AdministratorSerializer(admin).data
+            request.session['admin'] = admin
+            return result_util.success(admin)
         return result_util.error(error_code=code.INCORRECT_PASSWORD, message='密码错误')
     return result_util.error(error_code=code.EMPTY_REQUEST, message='请求体空')
 
