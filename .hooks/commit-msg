@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
 echo -e "\033[34mchecking your commit message, please wait...\033[0m"
-validate-commit-msg $2
-if [ $? -ne 0 ]; then
+if validate-commit-msg "$2"; then
+    echo -e "\033[32mcommit message check passed!\033[0m"
+else
     echo -e "\033[31mcommit message check failed!\033[0m"
     exit 1
-else
-    echo -e "\033[32mcommit message check passed!\033[0m"
 fi

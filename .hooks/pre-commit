@@ -1,14 +1,15 @@
-#!/bin/sh
+#!/bin/bash
+
 branch=$(git rev-parse --symbolic --abbrev-ref HEAD)
 if [ "master" == "$branch" ]; then
   echo -e "\033[31myou can not commit to $branch branch!\033[0m"
   exit 1
 fi
+
 echo -e "\033[34mchecking your code style, please wait...\033[0m"
-pylint activity administrator clazz course semester student util
-if [ $? -ne 0 ]; then
+if pylint activity administrator clazz course semester student util; then
+    echo -e "\033[32mcode style check passed!\033[0m"
+else
     echo -e "\033[31mcode style check failed!\033[0m"
     exit 1
-else
-    echo -e "\033[32mcode style check passed!\033[0m"
 fi
