@@ -170,4 +170,4 @@ class WechatStudent(models.Model):
     session_id = models.CharField(max_length=40)
     open_id = models.CharField(max_length=40)
     session_key = models.CharField(max_length=40)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
