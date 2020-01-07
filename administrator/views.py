@@ -9,7 +9,7 @@ from rest_framework import generics
 from rest_framework import mixins
 
 from administrator import code
-from administrator.constant.state import VALID
+from administrator.constant.administrator_state import VALID
 from administrator.models import Administrator, Privilege
 from administrator.serializers import AdministratorSerializer
 from util import result_util

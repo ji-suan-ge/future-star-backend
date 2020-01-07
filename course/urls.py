@@ -6,7 +6,7 @@ urls
 """
 from django.urls import path
 
-from course.views import resource, teacher, content, course
+from course.view import resource, teacher, content, course
 
 urlpatterns = [
     path('resource', resource.ResourceViewSet.as_view()),

@@ -9,7 +9,7 @@ from django.test import TestCase
 from clazz.models import Clazz, ClazzStudent
 from clazz.test.generate.clazz import get_clazz_data
 from semester.test.generate.semester import get_semester
-from student.constant.state import VALID
+from student.constant.student_state import VALID
 from student.test.generate.application import get_application_information
 from student.test.generate.evaluation import get_evaluation
 from student.test.generate.student import get_student
