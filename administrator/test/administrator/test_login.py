@@ -55,19 +55,6 @@ class TestAdministratorLogin(TestCase):
                                data={'account': 'not', 'password': '123'})
         self.assertEqual(res.json()['code'], code.ADMIN_NOT_EXIST)
 
-    def test_is_login(self):
-        """
-        重复登录
-
-        :author: lishanZheng
-        :date: 2019/12/30
-        """
-        res = self.client.post('/administrator/login',
-                               data={'account': self.admin.account, 'password': '123'})
-        res = self.client.post('/administrator/login',
-                               data={'account': self.admin.account, 'password': '123'})
-        self.assertEqual(res.json()['code'], code.IS_LOGIN)
-
     def test_logout(self):
         """
         成功登出
