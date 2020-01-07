@@ -8,9 +8,9 @@ from django.test import TestCase
 
 from activity.models import Activity
 from activity.test.generate.activity import get_activity_data
+from student.models import Student, Company
 from student.test.generate.company import get_company_data
 from student.test.generate.student import get_student_data
-from student.models import Student, Company
 
 
 class ActivityStudentBaseTest(TestCase):

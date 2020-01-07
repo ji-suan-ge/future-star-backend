@@ -5,6 +5,7 @@ student list test
 :date: 2020/01/03
 """
 from django.test import TestCase
+
 from clazz.models import Clazz, ClazzStudent
 from clazz.test.generate.clazz import get_clazz_data
 from semester.test.generate.semester import get_semester

@@ -4,14 +4,21 @@ views
 :author: lishanZheng
 :date: 2019/12/28
 """
+import hashlib
+import json
+from urllib import request as urllib_request
+
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 
 from clazz.models import Clazz, ClazzStudent
+from student.constant.code import INVALID_JS_CODE
 from student.constant.state import INVALID, NOT_GRADUATE, VALID
-from student.models import Student
+from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
 from util import result_util
 from util.pagination import CustomPageNumberPagination
@@ -111,3 +118,45 @@ class StudentDetailViewSet(UpdateModelMixin,
         if student_serializer.is_valid():
             student_serializer.save()
         return result_util.success(student_serializer.data)
+
+
+@csrf_exempt
+def login(request):
+    """
+    student login
+
+    :author: gexuewen
+    :date: 2020/01/06
+    """
+    app_id = settings.WECHAT_APP_ID
+    secret = settings.WECHAT_SECRET
+    code = request.POST.get('code')
+    url = 'https://api.weixin.qq.com/sns/jscode2session?' \
+          'appid=%s&' \
+          'secret=%s&' \
+          'js_code=%s&' \
+          'grant_type=authorization_code' % (app_id, secret, code)
+    with urllib_request.urlopen(url) as res:
+        result = json.loads(res.read().decode('utf-8'))
+    if 'errcode' in result:
+        return result_util.error(INVALID_JS_CODE, result.get('errmsg'))
+    open_id = result.get('openid')
+    session_key = result.get('session_key')
+    session_id = open_id + app_id
+    md5 = hashlib.md5()
+    md5.update(session_id.encode('utf-8'))
+    session_id = md5.hexdigest()
+    try:
+        wechat_student = WechatStudent.objects.get(open_id=open_id)
+    except WechatStudent.DoesNotExist:
+        wechat_student = None
+    if wechat_student is None:
+        WechatStudent.objects.create(open_id=open_id,
+                                     session_key=session_key,
+                                     session_id=session_id,
+                                     student=None
+                                     )
+    else:
+        wechat_student.session_key = session_key
+        wechat_student.save()
+    return result_util.success({'session_id': session_id})

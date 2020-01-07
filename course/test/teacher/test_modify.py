@@ -5,6 +5,7 @@ modify teacher test
 :date: 2019/12/28
 """
 from django.test import TestCase
+
 from course.test.generate.teacher import get_teacher, get_teacher_data
 from util.result_util import SUCCESS
 
@@ -16,6 +17,7 @@ class TestModifyTeacher(TestCase):
     :author: lishanZheng
     :date: 2020/01/04
     """
+
     def test_modify_teacher(self):
         """
         修改老师

@@ -5,6 +5,7 @@ modify semester test
 :date: 2020/01/02
 """
 from django.test import TestCase
+
 from semester.models import Semester
 from semester.test.generate.semester import get_semester_data
 from util import result_util
