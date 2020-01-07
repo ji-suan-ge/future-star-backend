@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+WECHAT_APP_ID = '<WECHAT_APP_ID>'
+WECHAT_SECRET = '<WECHAT_SECRET>'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -125,7 +128,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# 跨域增加忽略
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ()
@@ -151,4 +153,3 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'session-id'
 )
-
