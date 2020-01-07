@@ -13,7 +13,7 @@ from administrator.constant.state import VALID
 from administrator.models import Administrator, Privilege
 from administrator.serializers import AdministratorSerializer
 from util import result_util
-from util.encrypt import compare
+from util.encrypt import compare, encrypt
 from util.pagination import CustomPageNumberPagination
 
 
@@ -61,10 +61,14 @@ class AdministratorViewSet(mixins.ListModelMixin,
                 return result_util.error(error_code=code.ADMIN_EXIST, message='此管理员账户已经存在')
         privilege_data = request.data.get('privilege')
         self.privilege = Privilege.objects.create(**privilege_data)
-        administrator = self.get_serializer(data=request.data)
+        data = request.data
+        data['password'] = encrypt(data.get('password'))
+        administrator = self.get_serializer(data=data)
         if administrator.is_valid():
             administrator.save()
-        return result_util.success(administrator.data)
+        admin = administrator.data
+        admin['password'] = ''
+        return result_util.success(admin)
 
     def get_serializer_context(self):
         context = super(AdministratorViewSet, self).get_serializer_context()
@@ -125,6 +129,7 @@ def login(request):
     :author: lishanZheng
     :date: 2019/12/31
     """
+    print(request)
     if request.method == 'POST' and request.POST:
         account = request.POST.get('account')
         password = request.POST.get('password')
