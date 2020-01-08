@@ -6,9 +6,9 @@ clazz urls
 """
 from django.urls import path
 
-from clazz import views
+import clazz.view.clazz as clazz_view
 
 urlpatterns = [
-    path('clazz', views.ClazzViewSet.as_view()),
-    path('clazz/<int:primary_key>', views.ClazzDetailViewSet.as_view())
+    path('clazz', clazz_view.ClazzViewSet.as_view()),
+    path('clazz/<int:primary_key>', clazz_view.ClazzDetailViewSet.as_view())
 ]
