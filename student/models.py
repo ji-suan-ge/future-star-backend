@@ -154,6 +154,8 @@ class Student(models.Model):
     previous_company = models.CharField(max_length=30)
     # 创业前职位
     previous_position = models.CharField(max_length=30)
+    # 行业
+    profession = models.CharField(max_length=100)
     # 公司
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     # 0 -不再是校友 ｜ 1 -还未毕业的校友 ｜2 -校友
