@@ -152,5 +152,5 @@ CORS_ALLOW_HEADERS = (
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'session-id'
+    'ws-session-id'
 )
