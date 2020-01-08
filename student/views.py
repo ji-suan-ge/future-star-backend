@@ -23,7 +23,7 @@ from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
 from student.test.generate.student import get_section
 from util import result_util
-from util.cmp import cmp, get_letter
+from util.compare_letter import cmp, get_letter
 from util.pagination import CustomPageNumberPagination
 
 

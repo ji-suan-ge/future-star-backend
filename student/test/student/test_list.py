@@ -124,3 +124,22 @@ class TestStudentListBy(TestCase):
         results = result.get('data')
         self.assertEqual(results.get('results')[0].get('name'), self.student.name)
         self.assertEqual(result['code'], result_util.SUCCESS)
+
+    def test_student_list_by_letter(self):
+        """
+        按字母顺序获取校友信息
+
+        :author: lishanZheng
+        :date: 2020/01/08
+        """
+        student = get_student()
+        letter = 'A'
+        student.name = letter
+        student.save()
+        res = self.client.get('/student/student/letter',
+                              content_type="application/x-www-form-urlencoded")
+        result = res.json()
+        results = result.get('data')
+        self.assertEqual(results.get('results')[0].get('letter'), letter)
+        self.assertEqual(results.get('results')[0].get('group')[0]['name'], letter)
+        self.assertEqual(result['code'], result_util.SUCCESS)
