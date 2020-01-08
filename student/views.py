@@ -15,7 +15,6 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
-from xpinyin import Pinyin
 
 from clazz.models import Clazz, ClazzStudent
 from student.constant.code import INVALID_JS_CODE
@@ -24,6 +23,7 @@ from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
 from student.test.generate.student import get_section
 from util import result_util
+from util.cmp import cmp, get_letter
 from util.pagination import CustomPageNumberPagination
 
 
@@ -123,30 +123,31 @@ class StudentDetailViewSet(UpdateModelMixin,
         return result_util.success(student_serializer.data)
 
 
-def cmp(temp1, temp2):
+def classifier(student_set):
     """
-    compare first letter
+    按字母分类组织
 
     :author: lishanZheng
-    :date: 2020/01/08
+    :date: 2020/01/07
     """
-    if get_letter(temp1.name[0]) < get_letter(temp2.name[0]):
-        return -1
-    return 1
-
-
-def get_letter(name):
-    """
-    get first letter
-
-    :author: lishanZheng
-    :date: 2020/01/08
-    """
-    pinyin = Pinyin()
-    if name == '':
-        return 'Z'
-    letter = pinyin.get_initials(name, u'')[0]
-    return letter
+    student_list = []
+    times = len(student_set)
+    current_letter = ''
+    for i in range(times):
+        letter = get_letter(student_set[i].name).upper()
+        if len(student_list) != 0:
+            current_letter = student_list[len(student_list) - 1]['letter']
+        student_serializer_data = StudentSerializer(student_set[i]).data
+        if current_letter == letter:
+            section = student_list[len(student_list) - 1]
+            group = section['group']
+            group.append(student_serializer_data)
+        else:
+            section = get_section()
+            section['letter'] = letter.upper()
+            section['group'].append(student_serializer_data)
+            student_list.append(section)
+    return student_list
 
 
 class StudentLetterViewSet(mixins.ListModelMixin,
@@ -191,33 +192,6 @@ class StudentLetterViewSet(mixins.ListModelMixin,
             'results': student_list
         }
         return result_util.success(data)
-
-
-def classifier(student_set):
-    """
-    按字母分类组织
-
-    :author: lishanZheng
-    :date: 2020/01/07
-    """
-    student_list = []
-    times = len(student_set)
-    current_letter = ''
-    for i in range(times):
-        letter = get_letter(student_set[i].name)
-        if len(student_list) != 0:
-            current_letter = student_list[len(student_list) - 1]['letter']
-        student_serializer_data = StudentSerializer(student_set[i]).data
-        if current_letter == letter:
-            section = student_list[len(student_list) - 1]
-            group = section['group']
-            group.append(student_serializer_data)
-        else:
-            section = get_section()
-            section['letter'] = letter
-            section['group'].append(student_serializer_data)
-            student_list.append(section)
-    return student_list
 
 
 @csrf_exempt

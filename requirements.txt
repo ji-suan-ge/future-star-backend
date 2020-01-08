@@ -1,4 +1,4 @@
-xpinyin
+xpinyin==0.5.6
 astroid==2.3.3
 colorama==0.4.3
 Django==2.2.9
