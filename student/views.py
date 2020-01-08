@@ -6,6 +6,7 @@ views
 """
 import hashlib
 import json
+from functools import cmp_to_key
 from urllib import request as urllib_request
 
 from django.conf import settings
@@ -20,13 +21,15 @@ from student.constant.code import INVALID_JS_CODE
 from student.constant.student_state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
+from student.test.generate.student import get_section
 from util import result_util
+from util.cmp import cmp, get_letter
 from util.pagination import CustomPageNumberPagination
 
 
-class StudentList(mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  generics.GenericAPIView):
+class StudentViewSet(mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
     """
     student view set
 
@@ -118,6 +121,77 @@ class StudentDetailViewSet(UpdateModelMixin,
         if student_serializer.is_valid():
             student_serializer.save()
         return result_util.success(student_serializer.data)
+
+
+def classifier(student_set):
+    """
+    按字母分类组织
+
+    :author: lishanZheng
+    :date: 2020/01/07
+    """
+    student_list = []
+    times = len(student_set)
+    current_letter = ''
+    for i in range(times):
+        letter = get_letter(student_set[i].name).upper()
+        if len(student_list) != 0:
+            current_letter = student_list[len(student_list) - 1]['letter']
+        student_serializer_data = StudentSerializer(student_set[i]).data
+        if current_letter == letter:
+            section = student_list[len(student_list) - 1]
+            group = section['group']
+            group.append(student_serializer_data)
+        else:
+            section = get_section()
+            section['letter'] = letter.upper()
+            section['group'].append(student_serializer_data)
+            student_list.append(section)
+    return student_list
+
+
+class StudentLetterViewSet(mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           generics.GenericAPIView):
+    """
+    student view set
+
+    :author: lishanZheng
+    :date: 2020/01/01
+    """
+    serializer_class = StudentSerializer
+
+    def get(self, request):
+        """
+        get student list by letter
+
+        :author: lishanZheng
+        :date: 2020/01/07
+        """
+        queryset = Student.objects.filter(state__in=[NOT_GRADUATE, VALID])
+        name = self.request.GET.get('name')
+        city = self.request.GET.get('city')
+        semester = self.request.GET.get('semester_id')
+        if name is not None:
+            queryset = queryset.filter(name__contains=name)
+        if semester is not None:
+            clazz_id = list(Clazz.objects.filter(semester_id=semester)
+                            .values_list('id', flat=True))
+            student_set = ClazzStudent.objects.filter(clazz_id__in=clazz_id)
+            student_id = list(student_set.values_list('student_id', flat=True))
+            queryset = queryset.filter(id__in=student_id)
+        if city is not None:
+            student_set = Student.objects.filter(city__contains=city)
+            student_id = list(student_set.values_list('id', flat=True))
+            queryset = queryset.filter(id__in=student_id)
+        queryset = sorted(queryset, key=cmp_to_key(cmp))
+
+        student_list = classifier(queryset)
+        data = {
+            'count': len(queryset),
+            'results': student_list
+        }
+        return result_util.success(data)
 
 
 @csrf_exempt
