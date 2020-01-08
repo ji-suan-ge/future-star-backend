@@ -10,6 +10,7 @@ from student import views
 
 urlpatterns = [
     path('login', views.login),
-    path('student', views.StudentList.as_view()),
+    path('student', views.StudentViewSet.as_view()),
+    path('student/letter', views.StudentLetterViewSet.as_view()),
     path('student/<int:primary_key>', views.StudentDetailViewSet.as_view())
 ]

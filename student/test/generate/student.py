@@ -53,3 +53,13 @@ def get_student():
     student_data = get_student_data()
     student = Student.objects.create(**student_data, company=company)
     return student
+
+
+def get_section():
+    """
+    生成一个按字母排序返回的模版
+
+    :author: lishanZheng
+    :date: 2020/01/06
+    """
+    return {'letter': '', 'group': []}
