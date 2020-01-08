@@ -130,7 +130,7 @@ class TestStudentListBy(TestCase):
         按字母顺序获取校友信息
 
         :author: lishanZheng
-        :date: 2020/01/06
+        :date: 2020/01/08
         """
         student = get_student()
         letter = 'A'
