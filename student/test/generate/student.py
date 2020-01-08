@@ -37,6 +37,7 @@ def get_student_data():
         'school': 'school' + get_random_string(),
         'previous_company': 'previous_company' + get_random_string(),
         'previous_position': 'previous_position' + get_random_string(),
+        'profession': 'profession_' + get_random_string(),
         'state': random.randint(1, 2),
     }
     return student_data

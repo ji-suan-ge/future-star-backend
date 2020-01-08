@@ -125,7 +125,7 @@ class StudentDetailViewSet(UpdateModelMixin,
 
 def classifier(student_set):
     """
-    按字母分类组织
+    按首字母分类 后组合
 
     :author: lishanZheng
     :date: 2020/01/07
@@ -154,10 +154,10 @@ class StudentLetterViewSet(mixins.ListModelMixin,
                            mixins.CreateModelMixin,
                            generics.GenericAPIView):
     """
-    student view set
+    student letter view set
 
     :author: lishanZheng
-    :date: 2020/01/01
+    :date: 2020/01/08
     """
     serializer_class = StudentSerializer
 
@@ -166,12 +166,13 @@ class StudentLetterViewSet(mixins.ListModelMixin,
         get student list by letter
 
         :author: lishanZheng
-        :date: 2020/01/07
+        :date: 2020/01/08
         """
         queryset = Student.objects.filter(state__in=[NOT_GRADUATE, VALID])
         name = self.request.GET.get('name')
         city = self.request.GET.get('city')
         semester = self.request.GET.get('semester_id')
+        profession = self.request.GET.get('profession')
         if name is not None:
             queryset = queryset.filter(name__contains=name)
         if semester is not None:
@@ -184,6 +185,8 @@ class StudentLetterViewSet(mixins.ListModelMixin,
             student_set = Student.objects.filter(city__contains=city)
             student_id = list(student_set.values_list('id', flat=True))
             queryset = queryset.filter(id__in=student_id)
+        if profession is not None:
+            queryset = queryset.filter(profession__contains=profession)
         queryset = sorted(queryset, key=cmp_to_key(cmp))
 
         student_list = classifier(queryset)
