@@ -85,7 +85,9 @@ class RecommendationPeople(models.Model):
     :date: 2019/12/28
     """
     # 申请资料
-    information = models.ForeignKey(ApplicationInformation, on_delete=models.CASCADE)
+    information = models.ForeignKey(ApplicationInformation,
+                                    on_delete=models.CASCADE,
+                                    related_name="recommendation_people")
     # 推荐人姓名
     name = models.CharField(max_length=30, blank=False)
     # 推荐人的公司名字
@@ -102,9 +104,9 @@ class Evaluation(models.Model):
     :date: 2019/12/28
     """
     # 评价分数
-    fraction = models.IntegerField(blank=False)
+    fraction = models.IntegerField(blank=False, null=True)
     # 评价内容
-    description = models.TextField(blank=False)
+    description = models.TextField(blank=False, null=True)
 
 
 class Student(models.Model):

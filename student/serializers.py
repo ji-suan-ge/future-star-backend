@@ -42,6 +42,7 @@ class ApplicationInformationSerializer(serializers.ModelSerializer):
     :author: lishanZheng
     :date: 2019/12/28
     """
+    recommendation_peoples = RecommendationPeopleSerializer(many=True, read_only=True)
 
     class Meta:
         model = ApplicationInformation
