@@ -6,11 +6,14 @@ clazz list test
 """
 from django.test import TestCase
 
-import util.result_util as result_util
-from clazz.models import Clazz
+from clazz.constant.clazz_student_state import WAIT_FOR_AUDIT
+from clazz.models import Clazz, ClazzStudent
 from clazz.test.generate.clazz import get_clazz_data
 from semester.models import Semester
 from semester.test.generate.semester import get_semester_data
+from student.test.generate.application import get_application_information
+from student.test.generate.evaluation import get_evaluation
+from student.test.generate.student import get_student
 
 
 class TestClazzList(TestCase):
@@ -22,15 +25,37 @@ class TestClazzList(TestCase):
     """
 
     def setUp(self):
-        self.semester_data = get_semester_data()
-        self.semester = Semester.objects.create(**self.semester_data)
-        self.clazzes_data = []
-        for i in range(0, 6):
-            if i == -1:
-                pass
-            self.clazzes_data.append(get_clazz_data())
-        for clazz_data in self.clazzes_data:
-            Clazz.objects.create(semester=self.semester, **clazz_data)
+        self.student = get_student()
+        self.another_student = get_student()
+
+        semester_data = get_semester_data()
+        self.semester = Semester.objects.create(**semester_data)
+        another_semester_data = get_semester_data()
+        self.another_semester = Semester.objects.create(**another_semester_data)
+
+        self.clazzes = []
+        while len(self.clazzes) < 5:
+            clazz_data = get_clazz_data()
+            clazz = Clazz.objects.create(semester=self.semester, **clazz_data)
+            self.clazzes.append(clazz)
+        self.another_clazzes = []
+        while len(self.another_clazzes) < 7:
+            clazz_data = get_clazz_data()
+            clazz = Clazz.objects.create(semester=self.another_semester, **clazz_data)
+            self.another_clazzes.append(clazz)
+        data = {
+            'apply': get_application_information(),
+            'evaluation': get_evaluation(),
+            'state': WAIT_FOR_AUDIT,
+            'student': self.student
+        }
+        for clazz in self.clazzes[:-2]:
+            data['clazz'] = clazz
+            ClazzStudent.objects.create(**data)
+        data['student'] = self.another_student
+        for clazz in self.clazzes[-2:]:
+            data['clazz'] = clazz
+            ClazzStudent.objects.create(**data)
 
     def test_activity_list(self):
         """
@@ -39,16 +64,30 @@ class TestClazzList(TestCase):
         :author: gexuewen
         :date: 2020/01/01
         """
-        res = self.client.get('/clazz/clazz',
-                              data={
-                                  'page': 2,
-                                  'page_size': 2,
-                                  'semester_id': self.semester.id
-                              })
-        result = res.json()
-        self.assertEqual(result.get('code'), result_util.SUCCESS)
-        data = result.get('data')
-        results = data.get('results')
-        self.assertEqual(len(results), 2)
-        clazz = results[0]
-        self.assertEqual(self.clazzes_data[2].get('name'), clazz.get('name'))
+        data = {
+            'page': 2,
+            'page_size': 2,
+            'semester_id': self.another_semester.id
+        }
+        res = self.client.get('/clazz/clazz', data=data)
+        self.check_result_equal(res, 2, 0, self.another_clazzes[2])
+        data['page'] = 4
+        res = self.client.get('/clazz/clazz', data=data)
+        self.check_result_equal(res, 1, 0, self.another_clazzes[-1])
+        data['semester_id'] = self.semester.id
+        data['student_id'] = self.student.id
+        data['page'] = 2
+        res = self.client.get('/clazz/clazz', data=data)
+        self.check_result_equal(res, 1, 0, self.clazzes[2])
+
+    def check_result_equal(self, res, length, index, source):
+        """
+        检查结果是否相符
+
+        :author: gexuewen
+        :date: 2020/01/08
+        """
+        results = res.json().get('data').get('results')
+        self.assertEqual(len(results), length)
+        clazz = results[index]
+        self.assertEqual(source.name, clazz.get('name'))
