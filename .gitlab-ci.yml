@@ -12,7 +12,7 @@ stages:
 lint-job:
   stage: lint
   script:
-    - pylint activity administrator clazz course semester student util
+    - pylint activity administrator clazz course semester student util file
   tags:
     - future-1
 
