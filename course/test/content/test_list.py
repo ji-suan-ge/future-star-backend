@@ -43,13 +43,7 @@ class TestContentList(TestCase):
         """
         res = self.client.get('/course/content',
                               data={
-                                  'page': 2,
-                                  'page_size': 3
+                                  'course_id': self.course.id,
                               })
         res = res.json()
         self.assertEqual(res.get('code'), result_util.SUCCESS)
-        data = res.get('data')
-        results = data.get('results')
-        self.assertEqual(len(results), 3)
-        content = results[2]
-        self.assertEqual(content.get('content_name'), self.content.content_name)

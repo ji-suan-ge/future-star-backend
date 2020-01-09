@@ -72,7 +72,7 @@ class CourseDetailViewSet(mixins.UpdateModelMixin,
                           mixins.DestroyModelMixin,
                           generics.GenericAPIView):
     """
-    course detail view set
+    course detail views set
 
     :author: lishanZheng
     :date: 2020/01/05
