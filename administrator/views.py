@@ -129,7 +129,6 @@ def login(request):
     :author: lishanZheng
     :date: 2019/12/31
     """
-    print(request)
     if request.method == 'POST' and request.POST:
         account = request.POST.get('account')
         password = request.POST.get('password')
