@@ -7,8 +7,10 @@ activity list test
 from django.test import TestCase
 
 import util.result_util as result_util
-from activity.models import Activity
+from activity.constant import activity_state
+from activity.models import Activity, ActivityStudent
 from activity.test.generate.activity import get_activity_data
+from student.test.generate.student import get_student
 
 
 class TestActivityList(TestCase):
@@ -20,14 +22,23 @@ class TestActivityList(TestCase):
     """
 
     def setUp(self):
-        self.activities_data = []
+        self.activities = []
         for i in range(0, 3):
             if i == -1:
                 pass
-            self.activities_data.append(get_activity_data())
-        for activity_data in self.activities_data:
-            activity = Activity(**activity_data)
-            activity.save()
+            activity_data = get_activity_data()
+            activity_data['state'] = activity_state.ENROLLING
+            activity = Activity.objects.create(**activity_data)
+            self.activities.append(activity)
+        self.student = get_student()
+        self.another_student = get_student()
+        for activity in self.activities:
+            ActivityStudent.objects.create(activity=activity, student=self.student)
+            ActivityStudent.objects.create(activity=activity, student=self.another_student)
+        # 添加一个额外的学生和活动
+        activity_data = get_activity_data()
+        activity = Activity.objects.create(**activity_data)
+        ActivityStudent.objects.create(activity=activity, student=self.another_student)
 
     def test_activity_list(self):
         """
@@ -39,7 +50,9 @@ class TestActivityList(TestCase):
         res = self.client.get('/activity/activity',
                               data={
                                   'page': 2,
-                                  'page_size': 2
+                                  'page_size': 2,
+                                  'activity_state': activity_state.ENROLLING,
+                                  'student_id': self.student.id
                               })
         result = res.json()
         self.assertEqual(result.get('code'), result_util.SUCCESS)
@@ -48,4 +61,4 @@ class TestActivityList(TestCase):
         results = data.get('results')
         self.assertEqual(len(results), 1)
         activity = results[0]
-        self.assertEqual(self.activities_data[2].get('name'), activity.get('name'))
+        self.assertEqual(self.activities[2].name, activity.get('name'))
