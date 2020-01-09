@@ -109,6 +109,7 @@ class StudentDetailViewSet(UpdateModelMixin,
         if student.id != primary_key:
             pass
         data = request.data
+        print(data)
         company_data = data.get("company")
 
         company_serializer = CompanySerializer(data=company_data,
@@ -121,6 +122,7 @@ class StudentDetailViewSet(UpdateModelMixin,
                                                instance=student)
         if student_serializer.is_valid():
             student_serializer.save()
+        print(student_serializer.data)
         return result_util.success(student_serializer.data)
 
 

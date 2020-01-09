@@ -6,8 +6,8 @@ content
 """
 from rest_framework import mixins, generics
 
-from course.models import Content, Resource
-from course.serializers import ContentSerializer, ResourceSerializer
+from course.models import Content
+from course.serializers import ContentSerializer
 from util import result_util
 from util.pagination import CustomPageNumberPagination
 
@@ -48,28 +48,8 @@ class ContentViewSet(mixins.ListModelMixin,
         :author: lishanZheng
         :date: 2020/01/09
         """
-        course_id = self.request.GET.get('course_id')
-        contents = Content.objects.filter(course__id=course_id)
-        content_id = list(contents.values_list('id', flat=True))
-        times_i = len(content_id)
-        content_list = []
-        for i in range(times_i):
-            content = ContentSerializer(contents[i]).data
-            resources = Resource.objects.filter(content_id=contents[i].id)
-            times_j = len(resources)
-            section = []
-            for j in range(times_j):
-                section.append(ResourceSerializer(resources[j]).data)
-            content = {
-                'id': contents[i].id,
-                'content_name': contents[i].content_name,
-                'resources': section
-            }
-            content_list.append(content)
-            res = {
-                'results': content_list
-            }
-        return result_util.success(res)
+        result_content = self.list(request)
+        return result_util.success(result_content.data)
 
 
 class ContentDetailViewSet(mixins.UpdateModelMixin,

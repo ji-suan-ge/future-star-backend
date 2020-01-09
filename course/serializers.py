@@ -42,6 +42,7 @@ class ContentSerializer(ModelSerializer):
     :author: lishanZheng
     :date: 2020/01/04
     """
+    resources = ResourceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Content
