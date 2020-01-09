@@ -89,7 +89,9 @@ class Resource(models.Model):
         (resource_state.CLOSED, '关闭')
     )
     # 目录
-    content = models.ForeignKey(Content, on_delete=models.CASCADE)
+    content = models.ForeignKey(Content,
+                                on_delete=models.CASCADE,
+                                related_name="resources")
     # 资料的名字
     name = models.CharField(max_length=30)
     # 资源地址
