@@ -14,6 +14,11 @@ import os
 
 WECHAT_APP_ID = '<WECHAT_APP_ID>'
 WECHAT_SECRET = '<WECHAT_SECRET>'
+FILE_ROOT_DIR = os.getcwd()
+FILE_HOST = "http://47.101.53.141:8020"
+STATICFILES_DIRS = [
+    os.path.join(FILE_ROOT_DIR, "media"),
+]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
