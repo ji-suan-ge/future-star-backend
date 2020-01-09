@@ -29,11 +29,15 @@ class ClazzViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         query_set = Clazz.objects.all()
-        semester_id = self.request.query_params.get('semester_id')
-        if semester_id is not None:
+        params = self.request.query_params
+        clazz_state = params.get('clazz_state')
+        if clazz_state:
+            query_set = query_set.filter(state=clazz_state)
+        semester_id = params.get('semester_id')
+        if semester_id:
             query_set = query_set.filter(semester_id=semester_id)
         student_id = self.request.query_params.get('student_id')
-        if student_id is not None:
+        if student_id:
             clazz_student_set = ClazzStudent.objects.filter(student_id=student_id)
             clazz_id_list = list(clazz_student_set.values_list('clazz_id', flat=True))
             query_set = query_set.filter(id__in=clazz_id_list)

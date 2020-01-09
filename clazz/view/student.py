@@ -12,9 +12,11 @@ from clazz.models import Clazz, ClazzStudent
 from clazz.serializers import ClazzStudentSerializer
 from student.models import Evaluation, Student, ApplicationInformation, RecommendationPeople
 from util import result_util
+from util.pagination import CustomPageNumberPagination
 
 
 class ClazzStudentViewSet(mixins.CreateModelMixin,
+                          mixins.ListModelMixin,
                           generics.GenericAPIView):
     """
     clazz student view set
@@ -23,6 +25,21 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
     :date: 2020/01/08
     """
     serializer_class = ClazzStudentSerializer
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        query_set = ClazzStudent.objects.all()
+        params = self.request.query_params
+        clazz_id = params.get('clazz_id')
+        if clazz_id:
+            query_set = query_set.filter(clazz_id=clazz_id)
+        clazz_student_state = params.get('clazz_student_state')
+        if clazz_student_state:
+            query_set = query_set.filter(state=clazz_student_state)
+        student_id = params.get('student_id')
+        if student_id:
+            query_set = query_set.filter(student_id=student_id)
+        return query_set
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -30,6 +47,16 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         self.student = None
         self.apply = None
         self.evaluation = None
+
+    def get(self, request):
+        """
+        get clazz student
+
+        :author: gexuewen
+        :date: 2020/01/09
+        """
+        res = self.list(request).data
+        return result_util.success(res)
 
     def post(self, request):
         """
