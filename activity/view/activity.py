@@ -7,7 +7,7 @@ activity views
 from rest_framework import mixins, generics
 
 from activity.constant.activity_state import CLOSED
-from activity.models import Activity
+from activity.models import Activity, ActivityStudent
 from activity.serializers import ActivitySerializer
 from util import result_util
 from util.pagination import CustomPageNumberPagination
@@ -22,9 +22,20 @@ class ActivityViewSet(mixins.ListModelMixin,
     :author: gexuewen
     :date: 2020/01/01
     """
-    queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
     pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        params = self.request.query_params
+        query_set = Activity.objects.all()
+        activity_state = params.get('activity_state')
+        query_set = query_set.filter(state=activity_state)
+        student_id = params.get('student_id')
+        if student_id:
+            activity_student_set = ActivityStudent.objects.filter(student_id=student_id)
+            activity_id_list = activity_student_set.values_list('activity_id', flat=True)
+            query_set = query_set.filter(id__in=activity_id_list)
+        return query_set
 
     def get(self, request):
         """
