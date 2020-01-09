@@ -143,32 +143,33 @@ class Student(models.Model):
         (student_state.NOT_GRADUATE, '还未毕业的校友'),
         (student_state.VALID, '校友')
     )
-    name = models.CharField(max_length=30)
-    birthday = models.DateField()
-    phone_number = models.CharField(max_length=11)
+    name = models.CharField(max_length=30, null=True)
+    birthday = models.DateField(null=True)
+    avatar_url = models.CharField(max_length=1000)
+    phone_number = models.CharField(max_length=11, null=True)
     # 微信号
-    wx = models.CharField(max_length=30)
-    email = models.CharField(max_length=30)
+    wx = models.CharField(max_length=30, null=True)
+    email = models.CharField(max_length=30, null=True)
     # 城市
-    city = models.CharField(max_length=30)
+    city = models.CharField(max_length=30, null=True)
     # 毕业院校 包括时间
-    school = models.CharField(max_length=60)
+    school = models.CharField(max_length=60, null=True)
     # 创业前所在公司名称
-    previous_company = models.CharField(max_length=30)
+    previous_company = models.CharField(max_length=30, null=True)
     # 行业
-    profession = models.CharField(max_length=100)
+    profession = models.CharField(max_length=100, null=True)
     # 公司
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     # 最高学历
-    education = models.CharField(max_length=100)
+    education = models.CharField(max_length=100, null=True)
     # 创业前职位
-    previous_position = models.CharField(max_length=100)
+    previous_position = models.CharField(max_length=100, null=True)
     # 性别
     gender = models.IntegerField(choices=GENDER_CHOICE,
-                                 default=gender_choice.MALE)
+                                 default=gender_choice.MALE, null=True)
     # 校友状态
     state = models.IntegerField(choices=STATE_CHOICE,
-                                default=student_state.NOT_GRADUATE)
+                                default=student_state.INVALID)
 
 
 class WechatStudent(models.Model):
@@ -180,6 +181,5 @@ class WechatStudent(models.Model):
     """
     session_id = models.CharField(max_length=200)
     open_id = models.CharField(max_length=200)
-    avatar_url = models.CharField(max_length=1000)
     session_key = models.CharField(max_length=200)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
