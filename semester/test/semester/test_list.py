@@ -37,7 +37,7 @@ class TestSemesterList(TestCase):
         """
         res = self.client.get('/semester/semester',
                               data={
-                                  'page': 2,
+                                  'page': 1,
                                   'page_size': 1
                               })
         result = res.json()
