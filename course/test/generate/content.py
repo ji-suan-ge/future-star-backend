@@ -33,3 +33,13 @@ def get_content():
     content = Content(**content_data, course=get_course())
     content.save()
     return content
+
+
+def get_section():
+    """
+    生成条目返回模版
+
+    :author: lishanZheng
+    :date: 2020/01/09
+    """
+    return {'content': {}}

@@ -40,7 +40,7 @@ class ResourceDetailViewSet(mixins.UpdateModelMixin,
                             mixins.DestroyModelMixin,
                             generics.GenericAPIView):
     """
-    resource detail view set
+    resource detail views set
 
     :author: lishanZheng
     :date: 2020/01/04
