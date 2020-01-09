@@ -43,3 +43,4 @@ coverage.xml
 settings.py
 .env
 db.sqlite3
+media/

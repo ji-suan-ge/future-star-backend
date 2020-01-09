@@ -7,9 +7,9 @@ file
 import os
 import time
 
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
-from config import settings
 from file.constant.code import MISS_FILE
 from util.result_util import success, error
 
@@ -35,4 +35,7 @@ def upload(request):
         destination.write(chunk)
     destination.close()
     url = settings.FILE_HOST + '/' + file_name
-    return success(url)
+    res = {
+        'url': url
+    }
+    return success(res)
