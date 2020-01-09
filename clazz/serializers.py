@@ -6,9 +6,9 @@ clazz serializers
 """
 from rest_framework.serializers import ModelSerializer
 
+import student.serializers as student_serializer
 from clazz.models import Clazz, ClazzStudent
 from semester.serializers import SemesterSerializer
-import student.serializers as student_serializer
 
 
 class ClazzSerializer(ModelSerializer):

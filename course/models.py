@@ -7,6 +7,7 @@ models
 from django.db import models
 
 from clazz.models import Clazz
+from course.constant import course_state, resource_state, resource_type
 
 
 class Teacher(models.Model):
@@ -17,15 +18,15 @@ class Teacher(models.Model):
     :date: 2019/12/28
     """
     # 老师名字
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=30)
     # 头像
-    avatar = models.CharField(max_length=100)
+    avatar = models.CharField(max_length=100, blank=True, null=True)
     # 老师的头衔
     title = models.CharField(max_length=30)
     # 介绍
     introduction = models.TextField()
     # 联系方式
-    contact_way = models.CharField(max_length=30)
+    contact_way = models.CharField(max_length=30, blank=True, null=True)
 
 
 class Course(models.Model):
@@ -35,12 +36,16 @@ class Course(models.Model):
     :author: lishanZheng
     :date: 2019/12/28
     """
+    COURSE_STATE_CHOICE = (
+        (course_state.CLOSED, '已关闭'),
+        (course_state.OPEN, '开放中')
+    )
     # 课程
     clazz = models.ForeignKey(Clazz, on_delete=models.CASCADE)
     # 老师
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     # 课程名字
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=30)
     # 课程介绍
     introduction = models.TextField()
     # 上课地址
@@ -50,7 +55,8 @@ class Course(models.Model):
     # 课程结束时间
     end_time = models.DateField()
     # 课程状态
-    state = models.IntegerField(default=1)
+    state = models.IntegerField(choices=COURSE_STATE_CHOICE,
+                                default=course_state.OPEN)
 
 
 class Content(models.Model):  # 课程条目
@@ -63,7 +69,7 @@ class Content(models.Model):  # 课程条目
     # 条目
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # 条目名称
-    content_name = models.CharField(max_length=30, blank=False)
+    content_name = models.CharField(max_length=30)
 
 
 class Resource(models.Model):
@@ -73,21 +79,25 @@ class Resource(models.Model):
     :author: lishanZheng
     :date: 2019/12/28
     """
-    TYPE_CHOICE = (
-        (0, '文本'),
-        (1, 'PPT'),
-        (2, '视频')
+    RESOURCE_TYPE_CHOICE = (
+        (resource_type.TEXT, '文本'),
+        (resource_type.PPT, 'PPT'),
+        (resource_type.VIDEO, '视频')
     )
-    STATE = (
-        (0, '开放'),
-        (1, '关闭')
+    RESOURCE_STATE_CHOICE = (
+        (resource_state.OPEN, '开放'),
+        (resource_state.CLOSED, '关闭')
     )
     # 目录
     content = models.ForeignKey(Content, on_delete=models.CASCADE)
-    # 资料的类型
-    type = models.CharField(max_length=30, blank=False, choices=TYPE_CHOICE)
     # 资料的名字
-    name = models.CharField(max_length=30, blank=False)
-    url = models.CharField(max_length=30)
-    word = models.TextField()
-    state = models.IntegerField(default=1, blank=False, choices=STATE)
+    name = models.CharField(max_length=30)
+    # 资源地址
+    url = models.CharField(max_length=30, blank=True, null=True)
+    # 文本内容
+    word = models.TextField(blank=True, null=True)
+    # 资料的类型
+    type = models.IntegerField(choices=RESOURCE_TYPE_CHOICE,
+                               default=resource_type.TEXT)
+    state = models.IntegerField(default=resource_state.OPEN,
+                                choices=RESOURCE_STATE_CHOICE)

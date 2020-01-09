@@ -6,6 +6,8 @@ models
 """
 from django.db import models
 
+from semester.constant import semester_state
+
 
 class Semester(models.Model):
     """
@@ -14,9 +16,9 @@ class Semester(models.Model):
     :author: lishanZheng
     :date: 2019/12/28
     """
-    STATE = (
-        (0, '正在进行'),
-        (1, '已结束')
+    SEMESTER_STATE_CHOICE = (
+        (semester_state.OPEN, '正在进行'),
+        (semester_state.CLOSED, '已结束')
     )
     # 期数
     period_semester = models.IntegerField()
@@ -24,4 +26,5 @@ class Semester(models.Model):
     subject = models.TextField()
     # 介绍
     introduction = models.TextField()
-    state = models.IntegerField(choices=STATE, default=0)
+    state = models.IntegerField(choices=SEMESTER_STATE_CHOICE,
+                                default=semester_state.OPEN)

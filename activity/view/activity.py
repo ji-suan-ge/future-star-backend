@@ -6,7 +6,7 @@ activity views
 """
 from rest_framework import mixins, generics
 
-from activity.constant.activity_state import CLOSED_ACTIVITY, OPEN_ACTIVITY
+from activity.constant.activity_state import CLOSED
 from activity.models import Activity
 from activity.serializers import ActivitySerializer
 from util import result_util
@@ -22,7 +22,7 @@ class ActivityViewSet(mixins.ListModelMixin,
     :author: gexuewen
     :date: 2020/01/01
     """
-    queryset = Activity.objects.filter(state=OPEN_ACTIVITY)
+    queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
     pagination_class = CustomPageNumberPagination
 
@@ -56,7 +56,7 @@ class ActivityDetailViewSet(mixins.UpdateModelMixin,
     :author: gexuewen
     :date: 2020/01/02
     """
-    queryset = Activity.objects.filter(state=OPEN_ACTIVITY)
+    queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'primary_key'
@@ -82,5 +82,5 @@ class ActivityDetailViewSet(mixins.UpdateModelMixin,
         return result_util.success_empty()
 
     def perform_destroy(self, instance):
-        instance.state = CLOSED_ACTIVITY
+        instance.state = CLOSED
         instance.save()
