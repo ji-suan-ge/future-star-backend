@@ -165,8 +165,7 @@ class Student(models.Model):
     # 创业前职位
     previous_position = models.CharField(max_length=100, null=True)
     # 性别
-    gender = models.IntegerField(choices=GENDER_CHOICE,
-                                 default=gender_choice.MALE, null=True)
+    gender = models.IntegerField(choices=GENDER_CHOICE, null=True)
     # 校友状态
     state = models.IntegerField(choices=STATE_CHOICE,
                                 default=student_state.INVALID)

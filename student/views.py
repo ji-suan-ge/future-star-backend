@@ -17,7 +17,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 
 from clazz.models import Clazz, ClazzStudent
-from student.constant.code import INVALID_JS_CODE
+from student.constant import gender_choice
+from student.constant.code import INVALID_JS_CODE, INVALID_AVATAR_URL, INVALID_GENDER
 from student.constant.student_state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student, WechatStudent
 from student.serializers import StudentSerializer, CompanySerializer
@@ -205,35 +206,83 @@ def login(request):
     :author: gexuewen
     :date: 2020/01/06
     """
-    app_id = settings.WECHAT_APP_ID
-    secret = settings.WECHAT_SECRET
     code = request.POST.get('code')
-    url = 'https://api.weixin.qq.com/sns/jscode2session?' \
-          'appid=%s&' \
-          'secret=%s&' \
-          'js_code=%s&' \
-          'grant_type=authorization_code' % (app_id, secret, code)
-    with urllib_request.urlopen(url) as res:
-        result = json.loads(res.read().decode('utf-8'))
+    avatar_url = request.POST.get('avatar_url')
+    gender = request.POST.get('gender')
+    gender = get_gender(gender)
+    if gender not in [gender_choice.MALE, gender_choice.FEMALE]:
+        return result_util.error(INVALID_GENDER, '性别选项错误')
+    if (not avatar_url) or (not avatar_url.startswith('http')):
+        return result_util.error(INVALID_AVATAR_URL, '头像链接错误')
+    result = send_login_request(code)
     if 'errcode' in result:
         return result_util.error(INVALID_JS_CODE, result.get('errmsg'))
     open_id = result.get('openid')
     session_key = result.get('session_key')
-    session_id = open_id + app_id
-    md5 = hashlib.md5()
-    md5.update(session_id.encode('utf-8'))
-    session_id = md5.hexdigest()
-    try:
-        wechat_student = WechatStudent.objects.get(open_id=open_id)
-    except WechatStudent.DoesNotExist:
-        wechat_student = None
+    session_id = get_session_id(open_id)
+    wechat_student = WechatStudent.objects.filter(open_id=open_id).first()
     if wechat_student is None:
-        WechatStudent.objects.create(open_id=open_id,
-                                     session_key=session_key,
-                                     session_id=session_id,
-                                     student=None
-                                     )
+        student = Student.objects.create(avatar_url=avatar_url, gender=gender)
+        wechat_student = WechatStudent.objects.create(open_id=open_id,
+                                                      session_key=session_key,
+                                                      session_id=session_id,
+                                                      student=student
+                                                      )
     else:
         wechat_student.session_key = session_key
         wechat_student.save()
-    return result_util.success({'session_id': session_id})
+        wechat_student.student.avatar_url = avatar_url
+        wechat_student.student.gender = gender
+        wechat_student.student.save()
+    student_serializer = StudentSerializer(wechat_student.student)
+    data = {
+        'session_id': wechat_student.session_id,
+        'student': student_serializer.data
+    }
+    return result_util.success(data)
+
+
+def send_login_request(code):
+    """
+    send login request to wechat server
+
+    :author: gexuewen
+    :date: 2020/01/09
+    """
+    url = 'https://api.weixin.qq.com/sns/jscode2session?' \
+          'appid=%s&' \
+          'secret=%s&' \
+          'js_code=%s&' \
+          'grant_type=authorization_code' % (settings.WECHAT_APP_ID, settings.WECHAT_SECRET, code)
+    result = None
+    with urllib_request.urlopen(url) as res:
+        result = json.loads(res.read().decode('utf-8'))
+    return result
+
+
+def get_session_id(source):
+    """
+    calculate session id
+
+    :author: gexuewen
+    :date: 2020/01/06
+    """
+    session_id = source + settings.WECHAT_APP_ID
+    md5 = hashlib.md5()
+    md5.update(session_id.encode('utf-8'))
+    session_id = md5.hexdigest()
+    return session_id
+
+
+def get_gender(gender):
+    """
+    calculate gender
+
+    :author: gexuewen
+    :date: 2020/01/06
+    """
+    try:
+        gender = int(gender)
+    except (TypeError, ValueError):
+        gender = -1
+    return gender

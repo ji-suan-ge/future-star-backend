@@ -6,7 +6,8 @@ serializers
 """
 from rest_framework import serializers
 
-from .models import Student, Evaluation, RecommendationPeople, ApplicationInformation, Company
+from student.models import ApplicationInformation, Company, Evaluation
+from student.models import RecommendationPeople, Student, WechatStudent
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
@@ -78,4 +79,23 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Company.objects.create(
             company=self.context["company"],
+            **validated_data)
+
+
+class WechatStudentSerializer(serializers.ModelSerializer):
+    """
+    wechat student serializer
+
+    :author: egxuewen
+    :date: 2020/01/09
+    """
+    student = StudentSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = WechatStudent
+        fields = '__all__'
+
+    def create(self, validated_data):
+        return WechatStudent.objects.create(
+            student=self.context["student"],
             **validated_data)
