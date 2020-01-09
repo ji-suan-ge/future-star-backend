@@ -7,6 +7,7 @@ activity list test
 from django.test import TestCase
 
 import util.result_util as result_util
+from activity.constant import activity_state
 from activity.models import Activity
 from activity.test.generate.activity import get_activity_data
 
@@ -39,7 +40,8 @@ class TestActivityList(TestCase):
         res = self.client.get('/activity/activity',
                               data={
                                   'page': 2,
-                                  'page_size': 2
+                                  'page_size': 2,
+                                  'activity_state': activity_state.PUBLISHED
                               })
         result = res.json()
         self.assertEqual(result.get('code'), result_util.SUCCESS)
