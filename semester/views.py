@@ -23,8 +23,8 @@ class SemesterViewSet(ListModelMixin,
     :author: lishanZheng
     :date: 2020/01/02
     """
-    set = Semester.objects.all()
-    queryset = set.order_by('-period_semester')
+    query_set = Semester.objects.all()
+    queryset = query_set.order_by('-period_semester')
     serializer_class = SemesterSerializer
     pagination_class = CustomPageNumberPagination
 
