@@ -94,16 +94,21 @@ class ActivityClazzDetailViewSet(generics.GenericAPIView):
 
     def delete(self, request, activity_id, param):
         """
-        update clazz
+        delete activity clazz
 
         :author: gexuewen
-        :date: 2020/01/04
+        :date: 2020/01/10
         """
         if param == 'all':
             activity_clazz_list = ActivityClazz.objects.filter(activity_id=activity_id)
             for activity_clazz in activity_clazz_list:
                 activity_clazz.delete()
             return result_util.success_empty()
+        activity_clazzes = ActivityClazz.objects.filter(activity_id=activity_id,
+                                                        clazz_id=int(param))
+        instance = activity_clazzes.first()
+        if instance:
+            instance.delete()
         if not self:
             pass
         return result_util.success_empty()
