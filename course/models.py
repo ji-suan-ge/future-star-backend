@@ -74,6 +74,8 @@ class Content(models.Model):  # 课程条目
     """
     # 条目
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # 课程类别
+    sort = models.CharField(max_length=100)
     # 条目名称
     content_name = models.CharField(max_length=30)
 
