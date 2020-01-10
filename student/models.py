@@ -28,9 +28,9 @@ class Company(models.Model):
     # 公司名字
     name = models.CharField(max_length=30)
     # 公司网址
-    website = models.CharField(max_length=30, blank=True, null=True)
+    website = models.CharField(max_length=500, blank=True, null=True)
     # 微信公众号
-    wx_public = models.CharField(max_length=30, blank=True, null=True)
+    wx_public = models.CharField(max_length=50, blank=True, null=True)
     # 公司创建时间
     create_time = models.DateField()
     # 公司所在城市
@@ -44,9 +44,9 @@ class Company(models.Model):
     # 公司运营数据
     company_data = models.TextField()
     # 公司收入规模
-    income_scale = models.CharField(max_length=30)
+    income_scale = models.CharField(max_length=100)
     # 公司估值
-    value_of_assessment = models.CharField(max_length=20)
+    value_of_assessment = models.CharField(max_length=200)
     # 融资情况
     financing_situation = models.CharField(max_length=100)
 
@@ -148,12 +148,12 @@ class Student(models.Model):
     avatar_url = models.CharField(max_length=1000)
     phone_number = models.CharField(max_length=11, null=True)
     # 微信号
-    wx = models.CharField(max_length=30, null=True)
-    email = models.CharField(max_length=30, null=True)
+    wx = models.CharField(max_length=50, null=True)
+    email = models.CharField(max_length=50, null=True)
     # 城市
     city = models.CharField(max_length=30, null=True)
     # 毕业院校 包括时间
-    school = models.CharField(max_length=60, null=True)
+    school = models.CharField(max_length=100, null=True)
     # 创业前所在公司名称
     previous_company = models.CharField(max_length=30, null=True)
     # 行业
