@@ -6,12 +6,15 @@ clazz student views
 """
 from rest_framework import mixins, generics
 
+from clazz.constant import clazz_student_state
 from clazz.constant.clazz_student_state import WAIT_FOR_AUDIT
 from clazz.constant.code import ALREADY_APPLY
 from clazz.models import Clazz, ClazzStudent
 from clazz.serializers import ClazzStudentSerializer
+from student.constant import student_state
 from student.models import Evaluation, Student, ApplicationInformation, RecommendationPeople
 from util import result_util
+from util.dictionary import remove_key
 from util.pagination import CustomPageNumberPagination
 
 
@@ -33,9 +36,9 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         clazz_id = params.get('clazz_id')
         if clazz_id:
             query_set = query_set.filter(clazz_id=clazz_id)
-        clazz_student_state = params.get('clazz_student_state')
-        if clazz_student_state:
-            query_set = query_set.filter(state=clazz_student_state)
+        clazz_student_state_data = params.get('clazz_student_state')
+        if clazz_student_state_data:
+            query_set = query_set.filter(state=clazz_student_state_data)
         student_id = params.get('student_id')
         if student_id:
             query_set = query_set.filter(student_id=student_id)
@@ -84,6 +87,8 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         clazz_student_serializer = self.get_serializer(data=data)
         clazz_student_serializer.is_valid(raise_exception=True)
         clazz_student_serializer.save()
+        self.clazz.current_people_number = self.clazz.current_people_number + 1
+        self.clazz.save()
         return result_util.success_empty()
 
     def get_serializer_context(self):
@@ -93,3 +98,50 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         context['apply'] = self.apply
         context['evaluation'] = self.evaluation
         return context
+
+
+class ClazzStudentDetailViewSet(mixins.UpdateModelMixin,
+                                generics.GenericAPIView):
+    """
+    clazz student detail view set
+
+    :author: gexuewen
+    :date: 2020/01/10
+    """
+    queryset = ClazzStudent.objects.filter()
+    serializer_class = ClazzStudentSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'primary_key'
+
+    def put(self, request, primary_key):
+        """
+        update clazz student
+
+        :author: gexuewen
+        :date: 2020/01/10
+        """
+        data = request.data
+        clazz_student = self.get_object()
+        state = data.get('state')
+        if state:
+            clazz_student.state = state
+            clazz_student.save()
+            if state == clazz_student_state.GRADUATED:
+                student = clazz_student.student
+                student.state = student_state.VALID
+                student.save()
+        evaluation_data = data.get('evaluation')
+        if evaluation_data:
+            evaluation = clazz_student.evaluation
+            evaluation.fraction = evaluation_data.get('fraction')
+            evaluation.description = evaluation_data.get('description')
+            evaluation.save()
+        if not primary_key:
+            # make pylint happy
+            print(primary_key)
+        clazz_student_serializer = ClazzStudentSerializer(clazz_student)
+        data = clazz_student_serializer.data.copy()
+        data = remove_key(data, 'clazz')
+        data = remove_key(data, 'student')
+        data = remove_key(data, 'apply')
+        return result_util.success(data)
