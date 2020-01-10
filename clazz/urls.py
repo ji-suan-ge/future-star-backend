@@ -13,4 +13,5 @@ urlpatterns = [
     path('clazz', clazz_view.ClazzViewSet.as_view()),
     path('clazz/<int:primary_key>', clazz_view.ClazzDetailViewSet.as_view()),
     path('student', student_view.ClazzStudentViewSet.as_view()),
+    path('student/<int:primary_key>', student_view.ClazzStudentDetailViewSet.as_view())
 ]
