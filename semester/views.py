@@ -8,6 +8,10 @@ from rest_framework import mixins, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
+from clazz.constant import clazz_state
+from clazz.models import Clazz
+from semester.constant.code import CLAZZ_NOT_CLOSE
+from semester.constant.semester_state import CLOSED
 from semester.models import Semester
 from semester.serializers import SemesterSerializer
 from util import result_util
@@ -71,5 +75,15 @@ class SemesterDetailViewSet(mixins.UpdateModelMixin,
         :date: 2020/01/03
         """
         key = primary_key
+        state = request.data.get('state')
+        if state is not None:
+            state = int(state)
+        if state == CLOSED:
+            clazz_list = Clazz.objects.filter(semester_id=key)
+            count = len(clazz_list)
+            clazz_closed = Clazz.objects.filter(semester_id=key, state=clazz_state.CLOSED)
+            count_closed = len(clazz_closed)
+            if count != count_closed:
+                return result_util.error(CLAZZ_NOT_CLOSE, '存在课程没有结束')
         res = self.partial_update(request, key)
         return result_util.success(res.data)
