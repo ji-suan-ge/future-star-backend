@@ -20,7 +20,7 @@ class Teacher(models.Model):
     # 老师名字
     name = models.CharField(max_length=30)
     # 头像
-    avatar = models.CharField(max_length=100, blank=True, null=True)
+    avatar = models.CharField(max_length=1000, blank=True, null=True)
     # 老师的头衔
     title = models.CharField(max_length=30)
     # 介绍
@@ -103,7 +103,7 @@ class Resource(models.Model):
     # 资料的名字
     name = models.CharField(max_length=30)
     # 资源地址
-    url = models.CharField(max_length=30, blank=True, null=True)
+    url = models.CharField(max_length=1000, blank=True, null=True)
     # 文本内容
     word = models.TextField(blank=True, null=True)
     # 资料的类型
