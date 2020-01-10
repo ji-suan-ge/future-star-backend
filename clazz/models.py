@@ -39,6 +39,9 @@ class Clazz(models.Model):
     people_number_limit = models.IntegerField()
     # 当前人数
     current_people_number = models.IntegerField(default=0)
+    # 图片
+    image = models.CharField(max_length=1000,
+                             default='https://i.loli.net/2020/01/10/QD97zMkbIs1hw4d.png')
     # 班级状态
     state = models.IntegerField(choices=CLAZZ_STATE_CHOICE,
                                 default=clazz_state.UNOPENED)

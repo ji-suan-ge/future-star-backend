@@ -46,6 +46,12 @@ class Activity(models.Model):
     current_people_number = models.IntegerField(default=0)
     # 人数限制
     people_number_limit = models.IntegerField()
+    # 图片
+    image = models.CharField(max_length=1000,
+                             default='https://i.loli.net/2020/01/10/d5SzG6vIwA7PpkJ.png')
+    # 图标
+    icon = models.CharField(max_length=1000,
+                            default='https://i.loli.net/2020/01/09/iEZpONujHL4Sc13.png')
     # 活动状态
     state = models.IntegerField(choices=ACTIVITY_STATE_CHOICE,
                                 default=activity_state.PUBLISHED)

@@ -26,5 +26,12 @@ class Semester(models.Model):
     subject = models.TextField()
     # 介绍
     introduction = models.TextField()
+    # 图片
+    image = models.CharField(max_length=1000,
+                             default='https://i.loli.net/2020/01/09/zkinxqPBwbtdvXQ.png')
+    # 图标
+    icon = models.CharField(max_length=1000,
+                            default='https://i.loli.net/2020/01/09/iEZpONujHL4Sc13.png')
+
     state = models.IntegerField(choices=SEMESTER_STATE_CHOICE,
                                 default=semester_state.OPEN)

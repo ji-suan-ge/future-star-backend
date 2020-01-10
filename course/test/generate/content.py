@@ -18,7 +18,8 @@ def get_content_data():
     :author: lishanZheng
     :date: 2020/01/03
     """
-    content_data = {'content_name': 'content_name_' + get_random_string()}
+    content_data = {'content_name': 'content_name_' + get_random_string(),
+                    'sort': 'url'}
     return content_data
 
 
