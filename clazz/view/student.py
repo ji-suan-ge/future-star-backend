@@ -84,6 +84,8 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         clazz_student_serializer = self.get_serializer(data=data)
         clazz_student_serializer.is_valid(raise_exception=True)
         clazz_student_serializer.save()
+        self.clazz.current_people_number = self.clazz.current_people_number + 1
+        self.clazz.save()
         return result_util.success_empty()
 
     def get_serializer_context(self):
