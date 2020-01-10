@@ -4,6 +4,7 @@ activity clazz views
 :author: gexuewen
 :date: 2020/01/03
 """
+from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
@@ -81,3 +82,28 @@ class ActivityClazzViewSet(ListModelMixin,
         context['activity'] = self.activity
         context['clazz'] = self.clazz
         return context
+
+
+class ActivityClazzDetailViewSet(generics.GenericAPIView):
+    """
+    activity clazz detail view set
+
+    :author: gexuewen
+    :date: 2020/01/10
+    """
+
+    def delete(self, request, activity_id, param):
+        """
+        update clazz
+
+        :author: gexuewen
+        :date: 2020/01/04
+        """
+        if param == 'all':
+            activity_clazz_list = ActivityClazz.objects.filter(activity_id=activity_id)
+            for activity_clazz in activity_clazz_list:
+                activity_clazz.delete()
+            return result_util.success_empty()
+        if not self:
+            pass
+        return result_util.success_empty()
