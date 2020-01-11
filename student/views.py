@@ -98,6 +98,18 @@ class StudentDetailViewSet(UpdateModelMixin,
         instance.state = INVALID
         instance.save()
 
+    def get(self, request, primary_key):
+        """
+        get student by id
+
+        :author: lishanZheng
+        :date: 2020/01/11
+        """
+        student = self.get_object()
+        student.id = primary_key
+        student = StudentSerializer(student).data
+        return result_util.success(student)
+
     def put(self, request, primary_key):
         """
         update student
