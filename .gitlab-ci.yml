@@ -1,7 +1,17 @@
 image: python:3.7.6-stretch
 
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - env/
+
 before_script:
   - apt-get install default-libmysqlclient-dev
+  - python -m venv env
+  - source env/bin/activate
   - pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
   - pip install -r requirements.txt
 
