@@ -1,7 +1,17 @@
 image: python:3.7.6-stretch
 
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - env/
+
 before_script:
   - apt-get install default-libmysqlclient-dev
+  - python -m venv env
+  - source env/bin/activate
   - pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
   - pip install -r requirements.txt
 
@@ -19,11 +29,11 @@ lint-job:
 test-job:
   stage: test
   script:
-    - python manage.py test activity.test --settings=config.settings_test --keepdb
-    - python manage.py test administrator.test --settings=config.settings_test --keepdb
-    - python manage.py test clazz.test --settings=config.settings_test --keepdb
-    - python manage.py test course.test --settings=config.settings_test --keepdb
-    - python manage.py test semester.test --settings=config.settings_test --keepdb
-    - python manage.py test student.test --settings=config.settings_test --keepdb
+    - python manage.py test activity.test --settings=config.settings_sample --keepdb
+    - python manage.py test administrator.test --settings=config.settings_sample --keepdb
+    - python manage.py test clazz.test --settings=config.settings_sample --keepdb
+    - python manage.py test course.test --settings=config.settings_sample --keepdb
+    - python manage.py test semester.test --settings=config.settings_sample --keepdb
+    - python manage.py test student.test --settings=config.settings_sample --keepdb
   tags:
     - future-1
