@@ -90,9 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'future_star',
-        'USER': 'root',
-        'PASSWORD': 'future-star-666',
-        'HOST': 'future-star-mysql',
+        'USER': 'future_star',
+        'PASSWORD': 'future_star-2019',
+        'HOST': 'mysql-docker',
         'PORT': 3306,
         'TEST': {
             'NAME': 'future_star_test'
