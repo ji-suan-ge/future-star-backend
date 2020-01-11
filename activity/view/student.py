@@ -4,11 +4,12 @@ student views
 :author: gexuewen
 :date: 2020/01/02
 """
+from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 from activity.constant.activity_student_state import WAIT_FOR_PAY
-from activity.constant.code import ALREADY_JOIN
+from activity.constant.code import ALREADY_JOIN, ACTIVITY_STUDENT_NOT_FOUND
 from activity.models import ActivityStudent, Activity
 from activity.serializers import ActivityStudentSerializer
 from student.models import Student
@@ -82,3 +83,28 @@ class ActivityStudentViewSet(ListModelMixin,
         context['activity'] = self.activity
         context['student'] = self.student
         return context
+
+
+class ActivityStudentDetailViewSet(generics.GenericAPIView):
+    """
+    activity student detail view set
+
+    :author: gexuewen
+    :date: 2020/01/11
+    """
+
+    def get(self, request, activity_id, param):
+        """
+        get activity student record
+
+        :author: gexuewen
+        :date: 2020/01/11
+        """
+        student_id = int(param)
+        record = ActivityStudent.objects.filter(activity_id=activity_id,
+                                                student_id=student_id)
+        record = record.first()
+        if record:
+            activity_student_serializer = ActivityStudentSerializer(record)
+            return result_util.success(activity_student_serializer.data)
+        return result_util.error(ACTIVITY_STUDENT_NOT_FOUND, '未参与此活动')
