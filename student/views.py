@@ -20,7 +20,7 @@ from clazz.models import Clazz, ClazzStudent
 from student.constant import gender_choice
 from student.constant.code import INVALID_JS_CODE, INVALID_AVATAR_URL, INVALID_GENDER
 from student.constant.student_state import INVALID, NOT_GRADUATE, VALID
-from student.models import Student, WechatStudent
+from student.models import Student, WechatStudent, Company
 from student.serializers import StudentSerializer, CompanySerializer
 from student.test.generate.student import get_section
 from util import result_util
@@ -122,12 +122,16 @@ class StudentDetailViewSet(UpdateModelMixin,
             pass
         data = request.data
         company_data = data.get("company")
-
-        company_serializer = CompanySerializer(data=company_data,
-                                               partial=True,
-                                               instance=student.company)
-        if company_serializer.is_valid():
-            company_serializer.save()
+        if student.company is None:
+            company = Company.objects.create(**company_data)
+            student.company = company
+            student.save()
+        else:
+            company_serializer = CompanySerializer(data=company_data,
+                                                   partial=True,
+                                                   instance=student.company)
+            if company_serializer.is_valid():
+                company_serializer.save()
         student_serializer = StudentSerializer(data=data,
                                                partial=True,
                                                instance=student)
