@@ -54,6 +54,8 @@ class Course(models.Model):
     begin_time = models.DateField()
     # 课程结束时间
     end_time = models.DateField()
+    # 课程类别
+    sort = models.CharField(max_length=100)
     # 图片
     image = models.CharField(max_length=1000,
                              default='https://i.loli.net/2020/01/09/zkinxqPBwbtdvXQ.png')
@@ -74,8 +76,6 @@ class Content(models.Model):  # 课程条目
     """
     # 条目
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    # 课程类别
-    sort = models.CharField(max_length=100)
     # 条目名称
     content_name = models.CharField(max_length=30)
 
