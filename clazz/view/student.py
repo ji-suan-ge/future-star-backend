@@ -8,7 +8,7 @@ from rest_framework import mixins, generics
 
 from clazz.constant import clazz_student_state
 from clazz.constant.clazz_student_state import WAIT_FOR_AUDIT
-from clazz.constant.code import ALREADY_APPLY, INVALID_STUDENT_FORM
+from clazz.constant.code import ALREADY_APPLY
 from clazz.models import Clazz, ClazzStudent
 from clazz.serializers import ClazzStudentSerializer
 from student.constant import student_state
@@ -85,10 +85,8 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         self.clazz = Clazz.objects.filter(id=clazz_id).first()
         data.update({'state': WAIT_FOR_AUDIT})
         clazz_student_serializer = self.get_serializer(data=data)
-        if clazz_student_serializer.is_valid():
-            clazz_student_serializer.save()
-        else:
-            return result_util.error(INVALID_STUDENT_FORM, '请求表单错误')
+        clazz_student_serializer.is_valid(raise_exception=True)
+        clazz_student_serializer.save()
         self.clazz.current_people_number = self.clazz.current_people_number + 1
         self.clazz.save()
         return result_util.success_empty()
@@ -132,8 +130,6 @@ class ClazzStudentDetailViewSet(mixins.UpdateModelMixin,
                 student = clazz_student.student
                 student.state = student_state.VALID
                 student.save()
-            else:
-                return result_util.error(INVALID_STUDENT_FORM, '表单内容错误')
         evaluation_data = data.get('evaluation')
         if evaluation_data:
             evaluation = clazz_student.evaluation

@@ -7,7 +7,6 @@ clazz views
 from rest_framework import mixins, generics
 
 from clazz.constant.clazz_state import UNOPENED
-from clazz.constant.code import INVALID_CLAZZ_FORM
 from clazz.models import Clazz, ClazzStudent
 from clazz.serializers import ClazzSerializer
 from semester.models import Semester
@@ -76,10 +75,8 @@ class ClazzViewSet(mixins.ListModelMixin,
         self.semester = Semester.objects.filter(id=semester_id).first()
         data.update({'state': UNOPENED})
         clazz_serializer = self.get_serializer(data=data)
-        if clazz_serializer.is_valid():
-            clazz_serializer.save()
-        else:
-            return result_util.error(INVALID_CLAZZ_FORM, '请求表单内容错误')
+        clazz_serializer.is_valid(raise_exception=True)
+        clazz_serializer.save()
         return result_util.success(clazz_serializer.data)
 
     def get_serializer_context(self):

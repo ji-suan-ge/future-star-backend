@@ -9,7 +9,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 from activity.constant.activity_student_state import WAIT_FOR_PAY
-from activity.constant.code import ALREADY_JOIN, ACTIVITY_STUDENT_NOT_FOUND, INVALID_ACTIVITY_FORM
+from activity.constant.code import ALREADY_JOIN, ACTIVITY_STUDENT_NOT_FOUND
 from activity.models import ActivityStudent, Activity
 from activity.serializers import ActivityStudentSerializer
 from student.models import Student
@@ -74,10 +74,8 @@ class ActivityStudentViewSet(ListModelMixin,
             'state': WAIT_FOR_PAY
         }
         activity_student_serializer = self.get_serializer(data=data)
-        if activity_student_serializer.is_valid():
-            activity_student_serializer.save()
-        else:
-            return result_util.error(INVALID_ACTIVITY_FORM, '请求表单内容错误')
+        activity_student_serializer.is_valid(raise_exception=True)
+        activity_student_serializer.save()
         return result_util.success(activity_student_serializer.data)
 
     def get_serializer_context(self):
