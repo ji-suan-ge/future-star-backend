@@ -28,7 +28,7 @@ class ContentViewSet(mixins.ListModelMixin,
         queryset = Content.objects.all()
         course_id = self.request.GET.get('course_id')
         if course_id is not None:
-            queryset = Content.objects.filter(course_id__in=course_id)
+            queryset = Content.objects.filter(course_id=course_id)
         return queryset
 
     def post(self, request):
