@@ -8,7 +8,7 @@ from rest_framework import mixins, generics
 
 from clazz.constant import clazz_student_state
 from clazz.constant.clazz_student_state import WAIT_FOR_AUDIT
-from clazz.constant.code import ALREADY_APPLY
+from clazz.constant.code import ALREADY_APPLY, INVALID_STUDENT_FORM
 from clazz.models import Clazz, ClazzStudent
 from clazz.serializers import ClazzStudentSerializer
 from student.constant import student_state
@@ -130,6 +130,8 @@ class ClazzStudentDetailViewSet(mixins.UpdateModelMixin,
                 student = clazz_student.student
                 student.state = student_state.VALID
                 student.save()
+            else:
+                return result_util.error(INVALID_STUDENT_FORM, '表单内容错误')
         evaluation_data = data.get('evaluation')
         if evaluation_data:
             evaluation = clazz_student.evaluation
