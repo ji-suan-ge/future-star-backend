@@ -85,8 +85,10 @@ class ClazzStudentViewSet(mixins.CreateModelMixin,
         self.clazz = Clazz.objects.filter(id=clazz_id).first()
         data.update({'state': WAIT_FOR_AUDIT})
         clazz_student_serializer = self.get_serializer(data=data)
-        clazz_student_serializer.is_valid(raise_exception=True)
-        clazz_student_serializer.save()
+        if clazz_student_serializer.is_valid():
+            clazz_student_serializer.save()
+        else:
+            return result_util.error(INVALID_STUDENT_FORM, '请求表单错误')
         self.clazz.current_people_number = self.clazz.current_people_number + 1
         self.clazz.save()
         return result_util.success_empty()
