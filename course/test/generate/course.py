@@ -25,6 +25,7 @@ def get_course_data():
                    'location': 'location_' + get_random_string(),
                    'begin_time': '2020-06-02',
                    'end_time': '2020-07-02',
+                   'sort': 'sort_' + get_random_string(),
                    'state': random.randint(0, 1),
                    }
     return course_data
