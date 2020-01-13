@@ -18,7 +18,7 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 
 from clazz.models import Clazz, ClazzStudent
 from student.constant import gender_choice
-from student.constant.code import INVALID_JS_CODE, INVALID_AVATAR_URL, INVALID_GENDER
+from student.constant.code import INVALID_JS_CODE, INVALID_AVATAR_URL
 from student.constant.student_state import INVALID, NOT_GRADUATE, VALID
 from student.models import Student, WechatStudent, Company
 from student.serializers import StudentSerializer, CompanySerializer
@@ -227,7 +227,7 @@ def login(request):
     gender = request.POST.get('gender')
     gender = get_gender(gender)
     if gender not in [gender_choice.MALE, gender_choice.FEMALE]:
-        return result_util.error(INVALID_GENDER, '性别选项错误')
+        gender = gender_choice.MALE
     if (not avatar_url) or (not avatar_url.startswith('http')):
         return result_util.error(INVALID_AVATAR_URL, '头像链接错误')
     result = send_login_request(code)

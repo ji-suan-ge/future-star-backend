@@ -74,8 +74,8 @@ class ActivityStudentViewSet(ListModelMixin,
             'state': WAIT_FOR_PAY
         }
         activity_student_serializer = self.get_serializer(data=data)
-        if activity_student_serializer.is_valid():
-            activity_student_serializer.save()
+        activity_student_serializer.is_valid(raise_exception=True)
+        activity_student_serializer.save()
         return result_util.success(activity_student_serializer.data)
 
     def get_serializer_context(self):
